@@ -18,16 +18,26 @@
     "currency": "грн",
     "sqm": "м²",
     "years": "років",
-    "months": "місяців"
+    "months": "місяців",
+    "details": "Деталі",
+    "collapse": "Згорнути",
+    "expand": "Розгорнути"
   },
   "calculator": {
     "title": "Калькулятор іпотеки",
     "description": "Розрахуйте умови іпотеки за програмою «єОселя»",
+    "subtitle": "Змінюйте параметри — результат оновлюється автоматично",
     "steps": {
       "1": "Категорія користувача",
       "2": "Сімейні дані",
       "3": "Параметри житла",
       "4": "Параметри кредиту"
+    },
+    "sections": {
+      "category": "Хто ви",
+      "family": "Сім'я",
+      "property": "Житло",
+      "loan": "Кредит"
     },
     "category": {
       "label": "Ваша категорія",
@@ -64,7 +74,8 @@
     "loan": {
       "loanTerm": "Термін кредиту",
       "loanTermHint": "Від 1 до 20 років"
-    }
+    },
+    "fillAllFields": "Заповніть всі поля для розрахунку"
   },
   "results": {
     "title": "Результати розрахунку",
@@ -78,21 +89,31 @@
     "excessArea": "Надлишкова площа",
     "excessPercent": "Відсоток перевищення",
     "status": "Статус",
+    "statusPass": "Підходить",
+    "statusWarn": "Підходить з доплатами",
+    "statusFail": "Не підходить",
     "allowed": "Допустимо",
     "notAllowed": "Недопустимо",
     "limitPrice": "Гранична вартість 1 м²",
     "actualPrice": "Фактична вартість 1 м²",
     "excessPrice": "Перевищення на 1 м²",
     "propertyCost": "Вартість житла",
-    "baseDownPayment": "Базовий початковий внесок (20% або 10%)",
+    "baseDownPayment": "Базовий початковий внесок",
+    "baseDownPaymentPercent": "{percent}% від вартості",
     "areaExcessPayment": "+ Доплата за надлишкову площу",
     "priceExcessPayment": "+ Доплата за перевищення ціни",
     "totalDownPayment": "= Загальний початковий внесок",
     "loanAmount": "Сума кредиту",
+    "monthlyPaymentNow": "Щомісячний платіж зараз",
+    "monthlyPaymentFirst10": "Щомісячний платіж (перші 10 років, ставка {rate}%)",
+    "monthlyPaymentAfter10": "Новий платіж після 10 років (ставка {rate}%, від залишку боргу)",
+    "paymentHint": "Платіж у перші 10 років розрахований на весь строк кредиту. Після 10 років ставка змінюється і платіж перераховується.",
+    "fullTermSingleRate": "Весь строк кредиту — за ставкою {rate}%",
     "monthlyPaymentFirstPeriod": "Перші 10 років (ставка 3%/7%)",
     "monthlyPaymentSecondPeriod": "Наступні роки (ставка 6%/10%)",
     "totalInterest": "Загальна сума відсотків",
     "totalPayment": "Загальна сума виплат",
+    "totalForFullTerm": "За весь строк кредиту ({years} р.)",
     "warnings": "Увага",
     "errors": "Помилки",
     "comparisonTitle": "Порівняння сценаріїв",
@@ -106,7 +127,32 @@
     "comparisonPayment2": "Платіж (наступні роки)",
     "comparisonTotalInterest": "Всього відсотків",
     "comparisonTotalPayment": "Загальна виплата",
-    "after10y": "після 10 р."
+    "comparisonTotal": "Загальна виплата",
+    "after10y": "після 10 р.",
+    "bestMonthly": "Оптимально за місяць",
+    "bestTotal": "Оптимально загалом",
+    "deltaVsBase": "Різниця",
+    "baseScenario": "Базовий",
+    "whyThisResult": "Чому саме такий результат",
+    "whyRate": "Ставка: {rate1}% → {rate2}%",
+    "whyTerm": "Термін: {years} років",
+    "whyArea": "Площа: {actual} м² при нормативі {norm} м²",
+    "whyRegion": "Регіон: коефіцієнт {coeff}",
+    "diagnosis": {
+      "cause": "Причина",
+      "action": "Що можна змінити",
+      "buildingAgeFail": "Будинок {actual} років, допустимо до {max}",
+      "buildingAgeAction1": "Обрати будинок до {max} років",
+      "buildingAgeAction2": "Змінити категорію (якщо дозволяє)",
+      "areaFail": "Площа {actual} м² перевищує норматив {norm} м² на {percent}%",
+      "areaAction1": "Обрати житло до {norm} м²",
+      "areaAction2": "Збільшити кількість членів сім'ї",
+      "priceFail": "Ціна {actual} грн/м² перевищує граничну {limit} грн/м² на {percent}%",
+      "priceAction1": "Зменшити ціну до {limit} грн/м²",
+      "priceAction2": "Збільшити початковий внесок",
+      "priceWarn": "Перевищення ціни {percent}% → +{amount} грн до внеску",
+      "areaWarn": "Перевищення площі {percent}% → +{amount} грн до внеску"
+    }
   },
   "errors": {
     "buildingAgeExceeded": "Вік будинку перевищує дозволений для вашої категорії",

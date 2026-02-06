@@ -1,26 +1,39 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useId } from 'react'
 import { useTranslations } from 'next-intl'
 import type { CalculatorInput } from '@/lib/calculator/types'
 
 interface CalculatorFormProps {
-  onCalculate: (input: CalculatorInput) => void
-  loading?: boolean
+  input: Partial<CalculatorInput>
+  onInputChange: (input: Partial<CalculatorInput>) => void
 }
 
-export default function CalculatorForm({ onCalculate, loading }: CalculatorFormProps) {
+function AccordionSection({ title, defaultOpen = false, children }: { title: string; defaultOpen?: boolean; children: React.ReactNode }) {
+  const [open, setOpen] = useState(defaultOpen)
+  const id = useId()
+  return (
+    <div className="border border-gray-200 rounded-xl overflow-hidden">
+      <button
+        type="button"
+        onClick={() => setOpen(!open)}
+        aria-expanded={open}
+        aria-controls={id}
+        className="w-full flex items-center justify-between px-5 py-4 bg-gray-50 hover:bg-gray-100 transition-colors"
+      >
+        <span className="font-semibold text-gray-800">{title}</span>
+        <svg className={`w-5 h-5 text-gray-500 transition-transform ${open ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      {open && <div id={id} role="region" className="px-5 py-4 space-y-4">{children}</div>}
+    </div>
+  )
+}
+
+export default function CalculatorForm({ input, onInputChange }: CalculatorFormProps) {
   const t = useTranslations('calculator')
   const tCommon = useTranslations('common')
-  const [step, setStep] = useState(1)
-  const [validationError, setValidationError] = useState('')
-  const [input, setInput] = useState<Partial<CalculatorInput>>({
-    category: 'military',
-    propertyType: 'apartment',
-    region: 'Kyiv',
-    settlementType: 'major',
-    loanTerm: 20
-  })
 
   const categories = ['military', 'security', 'medic', 'teacher', 'scientist', 'idp', 'veteran', 'regular']
 
@@ -52,325 +65,129 @@ export default function CalculatorForm({ onCalculate, loading }: CalculatorFormP
     { code: 'Chernihiv', nameUk: 'Чернігівська' },
   ]
 
-  const validateStep = (currentStep: number): boolean => {
-    setValidationError('')
-    switch (currentStep) {
-      case 1:
-        if (!input.category) {
-          setValidationError(tCommon('required'))
-          return false
-        }
-        return true
-      case 2:
-        if (!input.age || input.age < 18 || input.age > 70) {
-          setValidationError(t('family.age') + ': 18-70')
-          return false
-        }
-        if (!input.familySize || input.familySize < 1 || input.familySize > 10) {
-          setValidationError(t('family.familySize') + ': 1-10')
-          return false
-        }
-        return true
-      case 3:
-        if (!input.region) {
-          setValidationError(t('property.region') + ' - ' + tCommon('required'))
-          return false
-        }
-        if (!input.area || input.area < 10) {
-          setValidationError(t('property.area') + ' - ' + tCommon('required'))
-          return false
-        }
-        if (!input.totalCost || input.totalCost < 100000) {
-          setValidationError(t('property.totalCost') + ' - ' + tCommon('required'))
-          return false
-        }
-        if (input.buildingAge === undefined || input.buildingAge === null || input.buildingAge < 0) {
-          setValidationError(t('property.buildingAge') + ' - ' + tCommon('required'))
-          return false
-        }
-        return true
-      case 4:
-        if (!input.loanTerm || input.loanTerm < 1 || input.loanTerm > 20) {
-          setValidationError(t('loan.loanTerm') + ': 1-20')
-          return false
-        }
-        return true
-      default:
-        return true
-    }
+  const update = (patch: Partial<CalculatorInput>) => {
+    onInputChange({ ...input, ...patch })
   }
 
-  const handleNext = () => {
-    if (!validateStep(step)) return
-
-    if (step < 4) {
-      setStep(step + 1)
-    } else {
-      onCalculate(input as CalculatorInput)
-    }
-  }
-
-  const handleBack = () => {
-    setValidationError('')
-    if (step > 1) {
-      setStep(step - 1)
-    }
-  }
+  const inputClass = "w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 text-sm"
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6 max-w-4xl mx-auto">
-      <h2 className="text-2xl font-bold text-primary-800 mb-6">{t('title')}</h2>
-      
-      <div className="mb-6">
-        <div className="flex justify-between items-center mb-4">
-          {[1, 2, 3, 4].map((s) => (
-            <div
-              key={s}
-              className={`flex-1 h-1 mx-1 rounded ${
-                step >= s ? 'bg-primary-500' : 'bg-gray-200'
-              }`}
-            />
+    <div className="space-y-3">
+      <AccordionSection title={t('sections.category')} defaultOpen={true}>
+        <p className="text-sm text-gray-500">{t('category.hint')}</p>
+        <div className="grid grid-cols-1 gap-2">
+          {categories.map((cat) => (
+            <label key={cat} className={`flex items-center space-x-3 px-3 py-2.5 border rounded-lg cursor-pointer transition-colors text-sm ${input.category === cat ? 'border-primary-500 bg-primary-50' : 'hover:bg-gray-50'}`}>
+              <input
+                type="radio"
+                value={cat}
+                checked={input.category === cat}
+                onChange={(e) => update({ category: e.target.value })}
+                className="text-primary-500"
+              />
+              <span className="text-gray-700">{t(`category.${cat}`)}</span>
+            </label>
           ))}
         </div>
-        <div className="hidden sm:flex justify-between text-sm text-gray-600">
-          {[1, 2, 3, 4].map((s) => (
-            <span key={s} className={step === s ? 'font-bold text-primary-600' : ''}>
-              {t(`steps.${s}`)}
-            </span>
-          ))}
-        </div>
-        <div className="sm:hidden text-center text-sm font-bold text-primary-600">
-          {t(`steps.${step}`)} ({step}/4)
-        </div>
-      </div>
+      </AccordionSection>
 
-      {validationError && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
-          {validationError}
+      <AccordionSection title={t('sections.family')} defaultOpen={true}>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            {t('family.age')}
+          </label>
+          <input
+            type="number"
+            min="18"
+            max="70"
+            value={input.age || ''}
+            onChange={(e) => update({ age: parseInt(e.target.value) || undefined })}
+            className={inputClass}
+            placeholder="18-70"
+          />
+          <p className="mt-1 text-xs text-gray-500">{t('family.ageHint')}</p>
         </div>
-      )}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            {t('family.familySize')}
+          </label>
+          <input
+            type="number"
+            min="1"
+            max="10"
+            value={input.familySize || ''}
+            onChange={(e) => update({ familySize: parseInt(e.target.value) || undefined })}
+            className={inputClass}
+            placeholder="1-10"
+          />
+          <p className="mt-1 text-xs text-gray-500">{t('family.familySizeHint')}</p>
+        </div>
+      </AccordionSection>
 
-      {step === 1 && (
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">{t('category.label')}</h3>
-          <p className="text-sm text-gray-500 mb-2">{t('category.hint')}</p>
-          <div className="grid grid-cols-1 gap-3">
-            {categories.map((cat) => (
-              <label key={cat} className={`flex items-start space-x-3 p-3 border rounded hover:bg-gray-50 cursor-pointer ${input.category === cat ? 'border-primary-500 bg-primary-50' : ''}`}>
-                <input
-                  type="radio"
-                  value={cat}
-                  checked={input.category === cat}
-                  onChange={(e) => setInput({ ...input, category: e.target.value })}
-                  className="mt-1"
-                />
-                <span className="text-gray-700">{t(`category.${cat}`)}</span>
-              </label>
+      <AccordionSection title={t('sections.property')} defaultOpen={true}>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            {t('property.propertyType')}
+          </label>
+          <div className="flex space-x-3">
+            <label className={`flex-1 flex items-center justify-center space-x-2 py-2.5 border rounded-lg cursor-pointer transition-colors text-sm ${input.propertyType === 'apartment' ? 'border-primary-500 bg-primary-50 font-medium' : 'hover:bg-gray-50'}`}>
+              <input type="radio" value="apartment" checked={input.propertyType === 'apartment'} onChange={(e) => update({ propertyType: e.target.value as 'apartment' | 'house' })} className="sr-only" />
+              <span className="text-gray-700">{t('property.apartment')}</span>
+            </label>
+            <label className={`flex-1 flex items-center justify-center space-x-2 py-2.5 border rounded-lg cursor-pointer transition-colors text-sm ${input.propertyType === 'house' ? 'border-primary-500 bg-primary-50 font-medium' : 'hover:bg-gray-50'}`}>
+              <input type="radio" value="house" checked={input.propertyType === 'house'} onChange={(e) => update({ propertyType: e.target.value as 'apartment' | 'house' })} className="sr-only" />
+              <span className="text-gray-700">{t('property.house')}</span>
+            </label>
+          </div>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">{t('property.region')}</label>
+          <select value={input.region || ''} onChange={(e) => update({ region: e.target.value })} className={inputClass}>
+            <option value="">{tCommon('required')}</option>
+            {regions.map((region) => (
+              <option key={region.code} value={region.code}>{region.nameUk}</option>
             ))}
+          </select>
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">{t('property.settlementType')}</label>
+          <div className="space-y-2">
+            <label className={`flex items-start space-x-2 px-3 py-2.5 border rounded-lg cursor-pointer transition-colors text-sm ${input.settlementType === 'major' ? 'border-primary-500 bg-primary-50' : 'hover:bg-gray-50'}`}>
+              <input type="radio" value="major" checked={input.settlementType === 'major'} onChange={(e) => update({ settlementType: e.target.value as 'major' | 'other' })} className="mt-0.5" />
+              <span className="text-gray-700">{t('property.settlementTypeMajor')}</span>
+            </label>
+            <label className={`flex items-start space-x-2 px-3 py-2.5 border rounded-lg cursor-pointer transition-colors text-sm ${input.settlementType === 'other' ? 'border-primary-500 bg-primary-50' : 'hover:bg-gray-50'}`}>
+              <input type="radio" value="other" checked={input.settlementType === 'other'} onChange={(e) => update({ settlementType: e.target.value as 'major' | 'other' })} className="mt-0.5" />
+              <span className="text-gray-700">{t('property.settlementTypeOther')}</span>
+            </label>
           </div>
         </div>
-      )}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">{t('property.area')} ({tCommon('sqm')})</label>
+          <input type="number" min="10" max="200" step="0.1" value={input.area || ''} onChange={(e) => update({ area: parseFloat(e.target.value) || undefined })} className={inputClass} />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">{t('property.totalCost')} ({tCommon('currency')})</label>
+          <input type="number" min="100000" max="10000000" step="1000" value={input.totalCost || ''} onChange={(e) => update({ totalCost: parseFloat(e.target.value) || undefined })} className={inputClass} />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">{t('property.buildingAge')} ({tCommon('years')})</label>
+          <input type="number" min="0" max="20" value={input.buildingAge ?? ''} onChange={(e) => update({ buildingAge: e.target.value === '' ? undefined : parseInt(e.target.value) })} className={inputClass} />
+          <p className="mt-1 text-xs text-gray-500">{t('property.buildingAgeHint')}</p>
+        </div>
+      </AccordionSection>
 
-      {step === 2 && (
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">{t('steps.2')}</h3>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('family.age')} *
-            </label>
-            <input
-              type="number"
-              min="18"
-              max="70"
-              value={input.age || ''}
-              onChange={(e) => setInput({ ...input, age: parseInt(e.target.value) })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
-              placeholder="18-70"
-            />
-            <p className="mt-1 text-sm text-gray-500">{t('family.ageHint')}</p>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('family.familySize')} *
-            </label>
-            <input
-              type="number"
-              min="1"
-              max="10"
-              value={input.familySize || ''}
-              onChange={(e) => setInput({ ...input, familySize: parseInt(e.target.value) })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
-              placeholder="1-10"
-            />
-            <p className="mt-1 text-sm text-gray-500">{t('family.familySizeHint')}</p>
+      <AccordionSection title={t('sections.loan')} defaultOpen={true}>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">{t('loan.loanTerm')} ({tCommon('years')})</label>
+          <input type="range" min="1" max="20" value={input.loanTerm || 20} onChange={(e) => update({ loanTerm: parseInt(e.target.value) })} className="w-full accent-primary-500" />
+          <div className="flex justify-between text-sm text-gray-600 mt-1">
+            <span>1</span>
+            <span className="font-bold text-primary-700">{input.loanTerm || 20} {tCommon('years')}</span>
+            <span>20</span>
           </div>
         </div>
-      )}
-
-      {step === 3 && (
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">{t('steps.3')}</h3>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('property.propertyType')}
-            </label>
-            <div className="flex space-x-4">
-              <label className={`flex items-center space-x-2 p-3 border rounded cursor-pointer ${input.propertyType === 'apartment' ? 'border-primary-500 bg-primary-50' : ''}`}>
-                <input
-                  type="radio"
-                  value="apartment"
-                  checked={input.propertyType === 'apartment'}
-                  onChange={(e) => setInput({ ...input, propertyType: e.target.value as 'apartment' | 'house' })}
-                />
-                <span className="text-gray-700">{t('property.apartment')}</span>
-              </label>
-              <label className={`flex items-center space-x-2 p-3 border rounded cursor-pointer ${input.propertyType === 'house' ? 'border-primary-500 bg-primary-50' : ''}`}>
-                <input
-                  type="radio"
-                  value="house"
-                  checked={input.propertyType === 'house'}
-                  onChange={(e) => setInput({ ...input, propertyType: e.target.value as 'apartment' | 'house' })}
-                />
-                <span className="text-gray-700">{t('property.house')}</span>
-              </label>
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('property.region')} *
-            </label>
-            <select
-              value={input.region || ''}
-              onChange={(e) => setInput({ ...input, region: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
-            >
-              <option value="">{tCommon('required')}</option>
-              {regions.map((region) => (
-                <option key={region.code} value={region.code}>
-                  {region.nameUk}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('property.settlementType')}
-            </label>
-            <div className="space-y-2">
-              <label className={`flex items-start space-x-2 p-3 border rounded cursor-pointer ${input.settlementType === 'major' ? 'border-primary-500 bg-primary-50' : ''}`}>
-                <input
-                  type="radio"
-                  value="major"
-                  checked={input.settlementType === 'major'}
-                  onChange={(e) => setInput({ ...input, settlementType: e.target.value as 'major' | 'other' })}
-                  className="mt-1"
-                />
-                <span className="text-gray-700 text-sm">{t('property.settlementTypeMajor')}</span>
-              </label>
-              <label className={`flex items-start space-x-2 p-3 border rounded cursor-pointer ${input.settlementType === 'other' ? 'border-primary-500 bg-primary-50' : ''}`}>
-                <input
-                  type="radio"
-                  value="other"
-                  checked={input.settlementType === 'other'}
-                  onChange={(e) => setInput({ ...input, settlementType: e.target.value as 'major' | 'other' })}
-                  className="mt-1"
-                />
-                <span className="text-gray-700 text-sm">{t('property.settlementTypeOther')}</span>
-              </label>
-            </div>
-            <p className="mt-1 text-sm text-gray-500">{t('property.settlementTypeHint')}</p>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('property.area')} ({tCommon('sqm')}) *
-            </label>
-            <input
-              type="number"
-              min="10"
-              max="200"
-              step="0.1"
-              value={input.area || ''}
-              onChange={(e) => setInput({ ...input, area: parseFloat(e.target.value) })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('property.totalCost')} ({tCommon('currency')}) *
-            </label>
-            <input
-              type="number"
-              min="100000"
-              max="10000000"
-              step="1000"
-              value={input.totalCost || ''}
-              onChange={(e) => setInput({ ...input, totalCost: parseFloat(e.target.value) })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('property.buildingAge')} ({tCommon('years')}) *
-            </label>
-            <input
-              type="number"
-              min="0"
-              max="20"
-              value={input.buildingAge ?? ''}
-              onChange={(e) => setInput({ ...input, buildingAge: parseInt(e.target.value) })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
-            />
-            <p className="mt-1 text-sm text-gray-500">{t('property.buildingAgeHint')}</p>
-          </div>
-        </div>
-      )}
-
-      {step === 4 && (
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold text-gray-800 mb-4">{t('steps.4')}</h3>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('loan.loanTerm')} ({tCommon('years')}) *
-            </label>
-            <input
-              type="number"
-              min="1"
-              max="20"
-              value={input.loanTerm || 20}
-              onChange={(e) => setInput({ ...input, loanTerm: parseInt(e.target.value) })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
-            />
-            <p className="mt-1 text-sm text-gray-500">{t('loan.loanTermHint')}</p>
-          </div>
-        </div>
-      )}
-
-      <div className="flex justify-between mt-8">
-        <button
-          onClick={handleBack}
-          disabled={step === 1}
-          className="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-gray-700"
-        >
-          {tCommon('back')}
-        </button>
-        <button
-          onClick={handleNext}
-          disabled={loading}
-          className="px-6 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
-        >
-          {loading ? (
-            <>
-              <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-              </svg>
-              <span>{tCommon('loading')}</span>
-            </>
-          ) : (
-            <span>{step === 4 ? tCommon('calculate') : tCommon('next')}</span>
-          )}
-        </button>
-      </div>
+      </AccordionSection>
     </div>
   )
 }

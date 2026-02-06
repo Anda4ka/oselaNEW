@@ -18,16 +18,26 @@
     "currency": "UAH",
     "sqm": "m²",
     "years": "years",
-    "months": "months"
+    "months": "months",
+    "details": "Details",
+    "collapse": "Collapse",
+    "expand": "Expand"
   },
   "calculator": {
     "title": "Mortgage Calculator",
     "description": "Calculate mortgage terms under the «єОселя» program",
+    "subtitle": "Change parameters — results update automatically",
     "steps": {
       "1": "User Category",
       "2": "Family Data",
       "3": "Property Parameters",
       "4": "Loan Parameters"
+    },
+    "sections": {
+      "category": "Who you are",
+      "family": "Family",
+      "property": "Property",
+      "loan": "Loan"
     },
     "category": {
       "label": "Your Category",
@@ -64,7 +74,8 @@
     "loan": {
       "loanTerm": "Loan Term",
       "loanTermHint": "From 1 to 20 years"
-    }
+    },
+    "fillAllFields": "Fill all fields to calculate"
   },
   "results": {
     "title": "Calculation Results",
@@ -78,21 +89,31 @@
     "excessArea": "Excess Area",
     "excessPercent": "Excess Percentage",
     "status": "Status",
+    "statusPass": "Eligible",
+    "statusWarn": "Eligible with surcharges",
+    "statusFail": "Not eligible",
     "allowed": "Allowed",
     "notAllowed": "Not Allowed",
     "limitPrice": "Limit Price per 1 m²",
     "actualPrice": "Actual Price per 1 m²",
     "excessPrice": "Excess per 1 m²",
     "propertyCost": "Property Cost",
-    "baseDownPayment": "Base Down Payment (20% or 10%)",
+    "baseDownPayment": "Base Down Payment",
+    "baseDownPaymentPercent": "{percent}% of cost",
     "areaExcessPayment": "+ Payment for Excess Area",
     "priceExcessPayment": "+ Payment for Price Excess",
     "totalDownPayment": "= Total Down Payment",
     "loanAmount": "Loan Amount",
+    "monthlyPaymentNow": "Monthly payment now",
+    "monthlyPaymentFirst10": "Monthly payment (first 10 years, rate {rate}%)",
+    "monthlyPaymentAfter10": "New payment after 10 years (rate {rate}%, on remaining balance)",
+    "paymentHint": "The payment for the first 10 years is calculated over the full loan term. After 10 years, the rate changes and the payment is recalculated.",
+    "fullTermSingleRate": "Full loan term — at {rate}% rate",
     "monthlyPaymentFirstPeriod": "First 10 Years (Rate 3%/7%)",
     "monthlyPaymentSecondPeriod": "Next Years (Rate 6%/10%)",
     "totalInterest": "Total Interest",
     "totalPayment": "Total Payment",
+    "totalForFullTerm": "For the full loan term ({years} yrs)",
     "warnings": "Warnings",
     "errors": "Errors",
     "comparisonTitle": "Scenario Comparison",
@@ -106,7 +127,32 @@
     "comparisonPayment2": "Payment (next years)",
     "comparisonTotalInterest": "Total Interest",
     "comparisonTotalPayment": "Total Payment",
-    "after10y": "after 10 yrs"
+    "comparisonTotal": "Total Payment",
+    "after10y": "after 10 yrs",
+    "bestMonthly": "Best monthly",
+    "bestTotal": "Best overall",
+    "deltaVsBase": "Difference",
+    "baseScenario": "Base",
+    "whyThisResult": "Why this result",
+    "whyRate": "Rate: {rate1}% → {rate2}%",
+    "whyTerm": "Term: {years} years",
+    "whyArea": "Area: {actual} m² with norm {norm} m²",
+    "whyRegion": "Region: coefficient {coeff}",
+    "diagnosis": {
+      "cause": "Reason",
+      "action": "What you can change",
+      "buildingAgeFail": "Building is {actual} years, allowed up to {max}",
+      "buildingAgeAction1": "Choose a building up to {max} years old",
+      "buildingAgeAction2": "Change category (if applicable)",
+      "areaFail": "Area {actual} m² exceeds norm {norm} m² by {percent}%",
+      "areaAction1": "Choose housing up to {norm} m²",
+      "areaAction2": "Increase family size",
+      "priceFail": "Price {actual} UAH/m² exceeds limit {limit} UAH/m² by {percent}%",
+      "priceAction1": "Reduce price to {limit} UAH/m²",
+      "priceAction2": "Increase down payment",
+      "priceWarn": "Price excess {percent}% → +{amount} UAH to down payment",
+      "areaWarn": "Area excess {percent}% → +{amount} UAH to down payment"
+    }
   },
   "errors": {
     "buildingAgeExceeded": "Building age exceeds limit for your category",

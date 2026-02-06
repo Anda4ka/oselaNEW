@@ -18,16 +18,26 @@
     "currency": "грн",
     "sqm": "м²",
     "years": "лет",
-    "months": "месяцев"
+    "months": "месяцев",
+    "details": "Подробнее",
+    "collapse": "Свернуть",
+    "expand": "Развернуть"
   },
   "calculator": {
     "title": "Калькулятор ипотеки",
     "description": "Рассчитайте условия ипотеки по программе «єОселя»",
+    "subtitle": "Меняйте параметры — результат обновляется автоматически",
     "steps": {
       "1": "Категория пользователя",
       "2": "Семейные данные",
       "3": "Параметры жилья",
       "4": "Параметры кредита"
+    },
+    "sections": {
+      "category": "Кто вы",
+      "family": "Семья",
+      "property": "Жильё",
+      "loan": "Кредит"
     },
     "category": {
       "label": "Ваша категория",
@@ -64,10 +74,11 @@
     "loan": {
       "loanTerm": "Срок кредита",
       "loanTermHint": "От 1 до 20 лет"
-    }
+    },
+    "fillAllFields": "Заполните все поля для расчёта"
   },
   "results": {
-    "title": "Результаты расчета",
+    "title": "Результаты расчёта",
     "eligibilityStatus": "Соответствие требованиям",
     "areaAnalysis": "Анализ площади",
     "priceAnalysis": "Анализ стоимости",
@@ -78,21 +89,31 @@
     "excessArea": "Избыточная площадь",
     "excessPercent": "Процент превышения",
     "status": "Статус",
+    "statusPass": "Подходит",
+    "statusWarn": "Подходит с доплатами",
+    "statusFail": "Не подходит",
     "allowed": "Допустимо",
     "notAllowed": "Недопустимо",
     "limitPrice": "Предельная стоимость 1 м²",
     "actualPrice": "Фактическая стоимость 1 м²",
     "excessPrice": "Превышение на 1 м²",
     "propertyCost": "Стоимость жилья",
-    "baseDownPayment": "Базовый начальный взнос (20% или 10%)",
+    "baseDownPayment": "Базовый начальный взнос",
+    "baseDownPaymentPercent": "{percent}% от стоимости",
     "areaExcessPayment": "+ Доплата за избыточную площадь",
     "priceExcessPayment": "+ Доплата за превышение цены",
     "totalDownPayment": "= Общий начальный взнос",
     "loanAmount": "Сумма кредита",
+    "monthlyPaymentNow": "Ежемесячный платёж сейчас",
+    "monthlyPaymentFirst10": "Ежемесячный платёж (первые 10 лет, ставка {rate}%)",
+    "monthlyPaymentAfter10": "Новый платёж после 10 лет (ставка {rate}%, от остатка долга)",
+    "paymentHint": "Платёж в первые 10 лет рассчитан на весь срок кредита. После 10 лет ставка меняется и платёж пересчитывается.",
+    "fullTermSingleRate": "Весь срок кредита — по ставке {rate}%",
     "monthlyPaymentFirstPeriod": "Первые 10 лет (ставка 3%/7%)",
     "monthlyPaymentSecondPeriod": "Следующие годы (ставка 6%/10%)",
     "totalInterest": "Общая сумма процентов",
     "totalPayment": "Общая сумма выплат",
+    "totalForFullTerm": "За весь срок кредита ({years} л.)",
     "warnings": "Внимание",
     "errors": "Ошибки",
     "comparisonTitle": "Сравнение сценариев",
@@ -106,7 +127,32 @@
     "comparisonPayment2": "Платёж (следующие годы)",
     "comparisonTotalInterest": "Всего процентов",
     "comparisonTotalPayment": "Общая выплата",
-    "after10y": "после 10 л."
+    "comparisonTotal": "Общая выплата",
+    "after10y": "после 10 л.",
+    "bestMonthly": "Оптимально за месяц",
+    "bestTotal": "Оптимально в целом",
+    "deltaVsBase": "Разница",
+    "baseScenario": "Базовый",
+    "whyThisResult": "Почему именно такой результат",
+    "whyRate": "Ставка: {rate1}% → {rate2}%",
+    "whyTerm": "Срок: {years} лет",
+    "whyArea": "Площадь: {actual} м² при нормативе {norm} м²",
+    "whyRegion": "Регион: коэффициент {coeff}",
+    "diagnosis": {
+      "cause": "Причина",
+      "action": "Что можно изменить",
+      "buildingAgeFail": "Дом {actual} лет, допустимо до {max}",
+      "buildingAgeAction1": "Выбрать дом до {max} лет",
+      "buildingAgeAction2": "Изменить категорию (если возможно)",
+      "areaFail": "Площадь {actual} м² превышает норматив {norm} м² на {percent}%",
+      "areaAction1": "Выбрать жильё до {norm} м²",
+      "areaAction2": "Увеличить количество членов семьи",
+      "priceFail": "Цена {actual} грн/м² превышает предельную {limit} грн/м² на {percent}%",
+      "priceAction1": "Снизить цену до {limit} грн/м²",
+      "priceAction2": "Увеличить первоначальный взнос",
+      "priceWarn": "Превышение цены {percent}% → +{amount} грн к взносу",
+      "areaWarn": "Превышение площади {percent}% → +{amount} грн к взносу"
+    }
   },
   "errors": {
     "buildingAgeExceeded": "Возраст дома превышает допустимый для вашей категории",
