@@ -212,67 +212,78 @@ export default function CalculatorResults({ result }: CalculatorResultsProps) {
         </div>
       </div>
 
-      {result.comparisonScenarios && result.comparisonScenarios.length > 0 && (
-        <div className="mt-8 border-t pt-6">
-          <h3 className="text-xl font-bold text-primary-800 mb-4">{t('comparisonTitle')}</h3>
-          <p className="text-sm text-gray-500 mb-4">{t('comparisonDescription')}</p>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm border-collapse">
-              <thead>
-                <tr className="bg-primary-50">
-                  <th className="border border-gray-200 px-3 py-2 text-left text-gray-700">{t('comparisonParam')}</th>
-                  {result.comparisonScenarios.map((s, i) => (
-                    <th key={i} className="border border-gray-200 px-3 py-2 text-center text-gray-700 min-w-[140px]">
-                      <div className="font-bold">{t('downPayment')} {s.downPaymentPercent}%</div>
-                      <div className="text-xs text-gray-500">{t('rate')} {(s.interestRate1 * 100).toFixed(0)}% / {(s.interestRate2 * 100).toFixed(0)}%</div>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="border border-gray-200 px-3 py-2 text-gray-700">{t('comparisonDownPayment')}</td>
-                  {result.comparisonScenarios.map((s, i) => (
-                    <td key={i} className="border border-gray-200 px-3 py-2 text-center font-medium">{formatCurrency(s.downPayment)}</td>
-                  ))}
-                </tr>
-                <tr className="bg-gray-50">
-                  <td className="border border-gray-200 px-3 py-2 text-gray-700">{t('comparisonLoanAmount')}</td>
-                  {result.comparisonScenarios.map((s, i) => (
-                    <td key={i} className="border border-gray-200 px-3 py-2 text-center font-medium">{formatCurrency(s.loanAmount)}</td>
-                  ))}
-                </tr>
-                <tr>
-                  <td className="border border-gray-200 px-3 py-2 text-gray-700">{t('comparisonPayment1')}</td>
-                  {result.comparisonScenarios.map((s, i) => (
-                    <td key={i} className="border border-gray-200 px-3 py-2 text-center font-semibold text-primary-700">{formatCurrency(s.monthlyPayment1)}</td>
-                  ))}
-                </tr>
-                {result.comparisonScenarios.some(s => s.monthlyPayment2 > 0) && (
-                  <tr className="bg-gray-50">
-                    <td className="border border-gray-200 px-3 py-2 text-gray-700">{t('comparisonPayment2')}</td>
-                    {result.comparisonScenarios.map((s, i) => (
-                      <td key={i} className="border border-gray-200 px-3 py-2 text-center font-semibold text-primary-700">{s.monthlyPayment2 > 0 ? formatCurrency(s.monthlyPayment2) : '—'}</td>
+      {result.comparisonScenarios && result.comparisonScenarios.length > 0 && (() => {
+        const hasP2 = result.comparisonScenarios!.some(s => s.monthlyPayment2 > 0)
+        const sorted = [...result.comparisonScenarios!].sort((a, b) => a.interestRate1 - b.interestRate1)
+        const s20 = sorted.filter(s => s.downPaymentPercent === 20)
+        const s10 = sorted.filter(s => s.downPaymentPercent === 10)
+
+        return (
+          <div className="mt-8 border-t pt-6">
+            <h3 className="text-xl font-bold text-primary-800 mb-1">{t('comparisonTitle')}</h3>
+            <p className="text-sm text-gray-400 mb-5">{t('comparisonDescription')}</p>
+            <div className="overflow-x-auto rounded-xl border border-gray-100">
+              <table className="w-full text-sm" style={{ fontVariantNumeric: 'tabular-nums' }}>
+                <thead>
+                  <tr>
+                    <th rowSpan={2} className="bg-gray-50 px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r border-gray-100 w-[180px]">{t('comparisonParam')}</th>
+                    <th colSpan={2} className="bg-primary-50 px-4 py-2 text-center text-sm font-bold text-primary-800 border-r border-gray-100">{t('downPayment')} 20%</th>
+                    <th colSpan={2} className="bg-primary-50 px-4 py-2 text-center text-sm font-bold text-primary-800">{t('downPayment')} 10%</th>
+                  </tr>
+                  <tr>
+                    {[...s20, ...s10].map((s, i) => (
+                      <th key={i} className={`bg-gray-50 px-4 py-2 text-center text-xs font-semibold text-gray-600 min-w-[130px] ${i === 1 ? 'border-r border-gray-100' : ''}`}>
+                        {t('rate')} {(s.interestRate1 * 100).toFixed(0)}%
+                        <span className="font-normal text-gray-400"> / {t('after10y')} {(s.interestRate2 * 100).toFixed(0)}%</span>
+                      </th>
                     ))}
                   </tr>
-                )}
-                <tr>
-                  <td className="border border-gray-200 px-3 py-2 text-gray-700">{t('comparisonTotalInterest')}</td>
-                  {result.comparisonScenarios.map((s, i) => (
-                    <td key={i} className="border border-gray-200 px-3 py-2 text-center text-orange-600">{formatCurrency(s.totalInterest)}</td>
-                  ))}
-                </tr>
-                <tr className="bg-primary-50 font-bold">
-                  <td className="border border-gray-200 px-3 py-2 text-gray-800">{t('comparisonTotalPayment')}</td>
-                  {result.comparisonScenarios.map((s, i) => (
-                    <td key={i} className="border border-gray-200 px-3 py-2 text-center text-primary-800">{formatCurrency(s.totalPayment)}</td>
-                  ))}
-                </tr>
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-gray-50">
+                  <tr>
+                    <td className="px-4 py-3 text-gray-800 font-medium border-r border-gray-100">{t('comparisonPayment1')}</td>
+                    {[...s20, ...s10].map((s, i) => (
+                      <td key={i} className={`px-4 py-3 text-right font-bold text-primary-700 ${i === 1 ? 'border-r border-gray-100' : ''}`}>{formatCurrency(s.monthlyPayment1)}</td>
+                    ))}
+                  </tr>
+                  {hasP2 && (
+                    <tr className="bg-gray-50/50">
+                      <td className="px-4 py-3 text-gray-800 font-medium border-r border-gray-100">{t('comparisonPayment2')}</td>
+                      {[...s20, ...s10].map((s, i) => (
+                        <td key={i} className={`px-4 py-3 text-right font-bold text-primary-700 ${i === 1 ? 'border-r border-gray-100' : ''}`}>{s.monthlyPayment2 > 0 ? formatCurrency(s.monthlyPayment2) : '—'}</td>
+                      ))}
+                    </tr>
+                  )}
+                  <tr className={hasP2 ? '' : 'bg-gray-50/50'}>
+                    <td className="px-4 py-3 text-gray-500 border-r border-gray-100">{t('comparisonTotalInterest')}</td>
+                    {[...s20, ...s10].map((s, i) => (
+                      <td key={i} className={`px-4 py-3 text-right text-amber-600 ${i === 1 ? 'border-r border-gray-100' : ''}`}>{formatCurrency(s.totalInterest)}</td>
+                    ))}
+                  </tr>
+                  <tr>
+                    <td className="px-4 py-3 text-gray-500 text-xs border-r border-gray-100">{t('comparisonDownPayment')}</td>
+                    {[...s20, ...s10].map((s, i) => (
+                      <td key={i} className={`px-4 py-3 text-right text-gray-500 text-xs ${i === 1 ? 'border-r border-gray-100' : ''}`}>{formatCurrency(s.downPayment)}</td>
+                    ))}
+                  </tr>
+                  <tr className="bg-gray-50/50">
+                    <td className="px-4 py-3 text-gray-500 text-xs border-r border-gray-100">{t('comparisonLoanAmount')}</td>
+                    {[...s20, ...s10].map((s, i) => (
+                      <td key={i} className={`px-4 py-3 text-right text-gray-500 text-xs ${i === 1 ? 'border-r border-gray-100' : ''}`}>{formatCurrency(s.loanAmount)}</td>
+                    ))}
+                  </tr>
+                  <tr className="bg-primary-800">
+                    <td className="px-4 py-3.5 text-white font-bold rounded-bl-xl border-r border-primary-700">{t('comparisonTotalPayment')}</td>
+                    {[...s20, ...s10].map((s, i) => (
+                      <td key={i} className={`px-4 py-3.5 text-right text-white font-bold ${i === 1 ? 'border-r border-primary-700' : ''} ${i === 3 ? 'rounded-br-xl' : ''}`}>{formatCurrency(s.totalPayment)}</td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
-      )}
+        )
+      })()}
     </div>
   )
 }

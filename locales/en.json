@@ -105,7 +105,8 @@
     "comparisonPayment1": "Payment (first 10 yrs)",
     "comparisonPayment2": "Payment (next years)",
     "comparisonTotalInterest": "Total Interest",
-    "comparisonTotalPayment": "Total Payment"
+    "comparisonTotalPayment": "Total Payment",
+    "after10y": "after 10 yrs"
   },
   "errors": {
     "buildingAgeExceeded": "Building age exceeds limit for your category",

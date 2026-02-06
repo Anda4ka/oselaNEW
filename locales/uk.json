@@ -105,7 +105,8 @@
     "comparisonPayment1": "Платіж (перші 10 р.)",
     "comparisonPayment2": "Платіж (наступні роки)",
     "comparisonTotalInterest": "Всього відсотків",
-    "comparisonTotalPayment": "Загальна виплата"
+    "comparisonTotalPayment": "Загальна виплата",
+    "after10y": "після 10 р."
   },
   "errors": {
     "buildingAgeExceeded": "Вік будинку перевищує дозволений для вашої категорії",

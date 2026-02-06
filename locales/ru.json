@@ -105,7 +105,8 @@
     "comparisonPayment1": "Платёж (первые 10 л.)",
     "comparisonPayment2": "Платёж (следующие годы)",
     "comparisonTotalInterest": "Всего процентов",
-    "comparisonTotalPayment": "Общая выплата"
+    "comparisonTotalPayment": "Общая выплата",
+    "after10y": "после 10 л."
   },
   "errors": {
     "buildingAgeExceeded": "Возраст дома превышает допустимый для вашей категории",
