@@ -67,6 +67,8 @@ export default function Navbar() {
             <button
               className="sm:hidden text-gray-700 p-1"
               onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={menuOpen ? t('closeMenu') : t('openMenu')}
+              aria-expanded={menuOpen}
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {menuOpen ? (

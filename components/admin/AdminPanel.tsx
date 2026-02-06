@@ -68,10 +68,10 @@ export default function AdminPanel() {
         setIsLoggedIn(true)
         await checkLogin()
       } else {
-        setError('Invalid credentials')
+        setError(t('errors.invalidCredentials'))
       }
     } catch (error) {
-      setError('Login failed')
+      setError(t('errors.loginFailed'))
     } finally {
       setLoading(false)
     }
@@ -109,10 +109,10 @@ export default function AdminPanel() {
         setSuccess(t('saveSuccess'))
         setTimeout(() => setSuccess(''), 3000)
       } else {
-        setError('Save failed')
+        setError(t('errors.saveFailed'))
       }
     } catch (error) {
-      setError('Save failed')
+      setError(t('errors.saveFailed'))
     } finally {
       setLoading(false)
     }

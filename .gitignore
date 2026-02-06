@@ -33,8 +33,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Prisma
-prisma/migrations/
+# Prisma (migrations are tracked in git for Railway deployment)
 
 # Database
 *.db

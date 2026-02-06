@@ -5,7 +5,7 @@ const withNextIntl = createNextIntlPlugin('./i18n.config.js');
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  allowedDevOrigins: ['*.replit.dev', '*.pike.replit.dev', '*.repl.co'],
+  output: 'standalone',
   async headers() {
     return [
       {

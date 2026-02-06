@@ -25,6 +25,8 @@ function isInputComplete(input: Partial<CalculatorInput>): boolean {
 export default function CalculatorPage() {
   const t = useTranslations('calculator')
   const tResults = useTranslations('results')
+  const tCommon = useTranslations('common')
+
   const [input, setInput] = useState<Partial<CalculatorInput>>({
     category: 'military',
     propertyType: 'apartment',
@@ -33,6 +35,7 @@ export default function CalculatorPage() {
     loanTerm: 20,
   })
   const [result, setResult] = useState<CalculationResult | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
@@ -48,13 +51,22 @@ export default function CalculatorPage() {
   }
 
   const calculate = useCallback(async (currentInput: Partial<CalculatorInput>) => {
-    if (!isInputComplete(currentInput)) return
+    if (!isInputComplete(currentInput)) {
+      if (abortRef.current) abortRef.current.abort()
+      abortRef.current = null
+      setLoading(false)
+      setErrorMessage(null)
+      setResult(null)
+      return
+    }
 
     if (abortRef.current) abortRef.current.abort()
     const controller = new AbortController()
     abortRef.current = controller
 
+    setErrorMessage(null)
     setLoading(true)
+
     try {
       const response = await fetch('/api/calculator', {
         method: 'POST',
@@ -62,22 +74,33 @@ export default function CalculatorPage() {
         body: JSON.stringify(currentInput),
         signal: controller.signal,
       })
+
+      if (!response.ok) {
+        throw new Error(`Calculation request failed with status ${response.status}`)
+      }
+
       const data: CalculationResult = await response.json()
       setResult(data)
     } catch (err: unknown) {
       if (err instanceof Error && err.name !== 'AbortError') {
         console.error('Calculation error:', err)
+        setResult(null)
+        setErrorMessage(t('calculationError'))
       }
     } finally {
-      setLoading(false)
+      if (abortRef.current === controller) {
+        abortRef.current = null
+        setLoading(false)
+      }
     }
-  }, [])
+  }, [t])
 
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current)
     debounceRef.current = setTimeout(() => {
       calculate(input)
     }, 400)
+
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current)
     }
@@ -93,6 +116,7 @@ export default function CalculatorPage() {
     if (result.warnings.length > 0 || result.additionalPayments.length > 0) return 'warn'
     return 'pass'
   }
+
   const status = getStatus()
 
   return (
@@ -116,6 +140,12 @@ export default function CalculatorPage() {
 
             <div className="hidden lg:block flex-1 min-w-0">
               <div className="sticky top-6">
+                {errorMessage && !loading && (
+                  <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+                    {errorMessage}
+                  </div>
+                )}
+
                 {loading && (
                   <div className="flex items-center justify-center py-8">
                     <svg className="animate-spin h-6 w-6 text-primary-500" viewBox="0 0 24 24">
@@ -124,14 +154,18 @@ export default function CalculatorPage() {
                     </svg>
                   </div>
                 )}
+
                 {result && !loading && (
                   <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
                     <CalculatorResults result={result} loanTermYears={input.loanTerm || 20} />
                   </div>
                 )}
-                {!result && !loading && (
+
+                {!result && !loading && !errorMessage && (
                   <div className="text-center py-12 text-gray-400">
-                    <svg className="mx-auto h-12 w-12 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                    <svg className="mx-auto h-12 w-12 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                    </svg>
                     <p className="text-sm">{t('fillAllFields')}</p>
                   </div>
                 )}
@@ -158,7 +192,10 @@ export default function CalculatorPage() {
                   <div className="text-left">
                     {result.success ? (
                       <>
-                        <div className="text-lg font-bold text-primary-800">{formatCurrency(result.monthlyPayment1)}<span className="text-xs text-gray-500 font-normal">/мiс</span></div>
+                        <div className="text-lg font-bold text-primary-800">
+                          {formatCurrency(result.monthlyPayment1)}
+                          <span className="text-xs text-gray-500 font-normal">/{tCommon('months')}</span>
+                        </div>
                         <div className="text-xs text-gray-500">{tResults('comparisonDownPayment')}: {formatCurrency(result.downPayment)}</div>
                       </>
                     ) : (
@@ -183,12 +220,22 @@ export default function CalculatorPage() {
         {result && !loading && <div className="lg:hidden h-20" />}
 
         <div className="lg:hidden px-4 pb-24">
+          {errorMessage && !loading && (
+            <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {errorMessage}
+            </div>
+          )}
           {loading && (
             <div className="flex items-center justify-center py-8">
               <svg className="animate-spin h-6 w-6 text-primary-500" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
               </svg>
+            </div>
+          )}
+          {!result && !loading && !errorMessage && (
+            <div className="text-center py-8 text-gray-400">
+              <p className="text-sm">{t('fillAllFields')}</p>
             </div>
           )}
         </div>

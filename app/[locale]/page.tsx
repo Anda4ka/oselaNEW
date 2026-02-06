@@ -2,12 +2,11 @@
 
 import { useTranslations, useLocale } from 'next-intl'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import Navbar from '@/components/Navbar'
 
 export default function HomePage() {
   const t = useTranslations('home')
   const locale = useLocale()
-  const router = useRouter()
 
   const categories = [
     { key: 'military', rate: '3%', color: 'bg-blue-500' },
@@ -21,10 +20,10 @@ export default function HomePage() {
   ]
 
   const features = [
-    { key: 'feature1', icon: '💰' },
-    { key: 'feature2', icon: '🏠' },
-    { key: 'feature3', icon: '📋' },
-    { key: 'feature4', icon: '⚡' },
+    { key: 'feature1', icon: '\u{1F4B0}' },
+    { key: 'feature2', icon: '\u{1F3E0}' },
+    { key: 'feature3', icon: '\u{1F4CB}' },
+    { key: 'feature4', icon: '\u26A1' },
   ]
 
   const steps = [
@@ -33,64 +32,9 @@ export default function HomePage() {
     { key: 'step3', num: '3' },
   ]
 
-  const locales = [
-    { code: 'uk', label: 'UA' },
-    { code: 'en', label: 'EN' },
-    { code: 'ru', label: 'RU' },
-  ]
-
-  const switchLocale = (newLocale: string) => {
-    const currentPath = window.location.pathname
-    const pathWithoutLocale = currentPath.replace(/^\/(uk|en|ru)/, '')
-    router.push(`/${newLocale}${pathWithoutLocale || ''}`)
-  }
-
   return (
     <div className="min-h-screen">
-      <header className="bg-white shadow-sm sticky top-0 z-50">
-        <nav className="container mx-auto px-4 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-2">
-              <span className="text-2xl font-bold text-primary-800">єОселя</span>
-            </div>
-            <div className="flex items-center space-x-4">
-              <Link 
-                href={`/${locale}/calculator`} 
-                className="hidden sm:inline text-gray-700 hover:text-primary-600 transition"
-              >
-                {t('nav.calculator')}
-              </Link>
-              <Link 
-                href={`/${locale}/admin`} 
-                className="hidden sm:inline text-gray-700 hover:text-primary-600 transition"
-              >
-                {t('nav.admin')}
-              </Link>
-              <div className="flex items-center space-x-1 border-l pl-4 ml-2">
-                {locales.map((loc) => (
-                  <button
-                    key={loc.code}
-                    onClick={() => switchLocale(loc.code)}
-                    className={`px-2 py-1 text-sm rounded ${
-                      locale === loc.code
-                        ? 'bg-primary-600 text-white'
-                        : 'text-gray-600 hover:bg-gray-100'
-                    }`}
-                  >
-                    {loc.label}
-                  </button>
-                ))}
-              </div>
-              <Link 
-                href={`/${locale}/calculator`} 
-                className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition"
-              >
-                {t('calculateNow')}
-              </Link>
-            </div>
-          </div>
-        </nav>
-      </header>
+      <Navbar />
 
       <section className="bg-gradient-to-b from-primary-600 to-primary-800 text-white py-20">
         <div className="container mx-auto px-4 text-center">
@@ -99,15 +43,15 @@ export default function HomePage() {
             {t('hero.subtitle')}
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link 
-              href={`/${locale}/calculator`} 
+            <Link
+              href={`/${locale}/calculator`}
               className="px-8 py-4 bg-white text-primary-700 rounded-lg font-semibold text-lg hover:bg-gray-100 transition shadow-lg"
             >
               {t('hero.calculateBtn')}
             </Link>
-            <a 
-              href="https://eoselia.diia.gov.ua" 
-              target="_blank" 
+            <a
+              href="https://eoselia.diia.gov.ua"
+              target="_blank"
               rel="noopener noreferrer"
               className="px-8 py-4 bg-transparent border-2 border-white text-white rounded-lg font-semibold text-lg hover:bg-white hover:text-primary-700 transition"
             >
@@ -189,8 +133,8 @@ export default function HomePage() {
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6">{t('cta.title')}</h2>
           <p className="text-xl mb-8 opacity-90">{t('cta.subtitle')}</p>
-          <Link 
-            href={`/${locale}/calculator`} 
+          <Link
+            href={`/${locale}/calculator`}
             className="inline-block px-8 py-4 bg-white text-primary-700 rounded-lg font-semibold text-lg hover:bg-gray-100 transition shadow-lg"
           >
             {t('cta.btn')}
@@ -198,12 +142,12 @@ export default function HomePage() {
         </div>
       </section>
 
-       <footer className="bg-gray-800 text-white py-8">
+      <footer className="bg-gray-800 text-white py-8">
         <div className="container mx-auto px-4 text-center">
           <p className="mb-2">{t('footer.rights')}</p>
-          <a 
-            href="https://eoselia.diia.gov.ua" 
-            target="_blank" 
+          <a
+            href="https://eoselia.diia.gov.ua"
+            target="_blank"
             rel="noopener noreferrer"
             className="text-gray-300 hover:text-white transition"
           >

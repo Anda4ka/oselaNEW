@@ -75,7 +75,35 @@
       "loanTerm": "Loan Term",
       "loanTermHint": "From 1 to 20 years"
     },
-    "fillAllFields": "Fill all fields to calculate"
+    "fillAllFields": "Fill all fields to calculate",
+    "calculationError": "Failed to calculate. Check your connection and try again.",
+    "regions": {
+      "Kyiv": "Kyiv",
+      "Vinnytsia": "Vinnytsia",
+      "Volyn": "Volyn",
+      "Dnipropetrovsk": "Dnipropetrovsk",
+      "Donetsk": "Donetsk",
+      "Zhytomyr": "Zhytomyr",
+      "Zakarpattia": "Zakarpattia",
+      "Zaporizhzhia": "Zaporizhzhia",
+      "IvanoFrankivsk": "Ivano-Frankivsk",
+      "KyivRegion": "Kyiv Region",
+      "Kirovohrad": "Kirovohrad",
+      "Luhansk": "Luhansk",
+      "Lviv": "Lviv",
+      "Mykolaiv": "Mykolaiv",
+      "Odesa": "Odesa",
+      "Poltava": "Poltava",
+      "Rivne": "Rivne",
+      "Sumy": "Sumy",
+      "Ternopil": "Ternopil",
+      "Kharkiv": "Kharkiv",
+      "Kherson": "Kherson",
+      "Khmelnytskyi": "Khmelnytskyi",
+      "Cherkasy": "Cherkasy",
+      "Chernivtsi": "Chernivtsi",
+      "Chernihiv": "Chernihiv"
+    }
   },
   "results": {
     "title": "Calculation Results",
@@ -191,7 +219,12 @@
     "changePassword": "Change Password",
     "currentPassword": "Current Password",
     "newPassword": "New Password",
-    "confirmPassword": "Confirm Password"
+    "confirmPassword": "Confirm Password",
+    "errors": {
+      "invalidCredentials": "Invalid credentials",
+      "loginFailed": "Login failed",
+      "saveFailed": "Failed to save settings"
+    }
   },
   "home": {
     "nav": {
@@ -263,7 +296,9 @@
   "nav": {
     "home": "Home",
     "calculator": "Calculator",
-    "admin": "Admin Panel"
+    "admin": "Admin Panel",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "footer": {
     "rights": "All rights reserved",

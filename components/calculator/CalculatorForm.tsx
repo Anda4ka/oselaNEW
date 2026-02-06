@@ -12,6 +12,7 @@ interface CalculatorFormProps {
 function AccordionSection({ title, defaultOpen = false, children }: { title: string; defaultOpen?: boolean; children: React.ReactNode }) {
   const [open, setOpen] = useState(defaultOpen)
   const id = useId()
+
   return (
     <div className="border border-gray-200 rounded-xl overflow-hidden">
       <button
@@ -36,40 +37,39 @@ export default function CalculatorForm({ input, onInputChange }: CalculatorFormP
   const tCommon = useTranslations('common')
 
   const categories = ['military', 'security', 'medic', 'teacher', 'scientist', 'idp', 'veteran', 'regular']
-
   const regions = [
-    { code: 'Kyiv', nameUk: 'Київ' },
-    { code: 'Vinnytsia', nameUk: 'Вінницька' },
-    { code: 'Volyn', nameUk: 'Волинська' },
-    { code: 'Dnipropetrovsk', nameUk: 'Дніпропетровська' },
-    { code: 'Donetsk', nameUk: 'Донецька' },
-    { code: 'Zhytomyr', nameUk: 'Житомирська' },
-    { code: 'Zakarpattia', nameUk: 'Закарпатська' },
-    { code: 'Zaporizhzhia', nameUk: 'Запорізька' },
-    { code: 'IvanoFrankivsk', nameUk: 'Івано-Франківська' },
-    { code: 'KyivRegion', nameUk: 'Київська' },
-    { code: 'Kirovohrad', nameUk: 'Кіровоградська' },
-    { code: 'Luhansk', nameUk: 'Луганська' },
-    { code: 'Lviv', nameUk: 'Львівська' },
-    { code: 'Mykolaiv', nameUk: 'Миколаївська' },
-    { code: 'Odesa', nameUk: 'Одеська' },
-    { code: 'Poltava', nameUk: 'Полтавська' },
-    { code: 'Rivne', nameUk: 'Рівненська' },
-    { code: 'Sumy', nameUk: 'Сумська' },
-    { code: 'Ternopil', nameUk: 'Тернопільська' },
-    { code: 'Kharkiv', nameUk: 'Харківська' },
-    { code: 'Kherson', nameUk: 'Херсонська' },
-    { code: 'Khmelnytskyi', nameUk: 'Хмельницька' },
-    { code: 'Cherkasy', nameUk: 'Черкаська' },
-    { code: 'Chernivtsi', nameUk: 'Чернівецька' },
-    { code: 'Chernihiv', nameUk: 'Чернігівська' },
+    'Kyiv',
+    'Vinnytsia',
+    'Volyn',
+    'Dnipropetrovsk',
+    'Donetsk',
+    'Zhytomyr',
+    'Zakarpattia',
+    'Zaporizhzhia',
+    'IvanoFrankivsk',
+    'KyivRegion',
+    'Kirovohrad',
+    'Luhansk',
+    'Lviv',
+    'Mykolaiv',
+    'Odesa',
+    'Poltava',
+    'Rivne',
+    'Sumy',
+    'Ternopil',
+    'Kharkiv',
+    'Kherson',
+    'Khmelnytskyi',
+    'Cherkasy',
+    'Chernivtsi',
+    'Chernihiv',
   ]
 
   const update = (patch: Partial<CalculatorInput>) => {
     onInputChange({ ...input, ...patch })
   }
 
-  const inputClass = "w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 text-sm"
+  const inputClass = 'w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 text-sm'
 
   return (
     <div className="space-y-3">
@@ -144,8 +144,8 @@ export default function CalculatorForm({ input, onInputChange }: CalculatorFormP
           <label className="block text-sm font-medium text-gray-700 mb-1">{t('property.region')}</label>
           <select value={input.region || ''} onChange={(e) => update({ region: e.target.value })} className={inputClass}>
             <option value="">{tCommon('required')}</option>
-            {regions.map((region) => (
-              <option key={region.code} value={region.code}>{region.nameUk}</option>
+            {regions.map((regionCode) => (
+              <option key={regionCode} value={regionCode}>{t(`regions.${regionCode}`)}</option>
             ))}
           </select>
         </div>
