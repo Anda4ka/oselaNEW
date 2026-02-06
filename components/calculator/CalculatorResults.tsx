@@ -1,7 +1,7 @@
 'use client'
 
 import { useTranslations } from 'next-intl'
-import type { CalculationResult } from '@/lib/calculator/types'
+import type { CalculationResult, ComparisonScenario } from '@/lib/calculator/types'
 
 interface CalculatorResultsProps {
   result: CalculationResult
@@ -211,6 +211,68 @@ export default function CalculatorResults({ result }: CalculatorResultsProps) {
           </div>
         </div>
       </div>
+
+      {result.comparisonScenarios && result.comparisonScenarios.length > 0 && (
+        <div className="mt-8 border-t pt-6">
+          <h3 className="text-xl font-bold text-primary-800 mb-4">{t('comparisonTitle')}</h3>
+          <p className="text-sm text-gray-500 mb-4">{t('comparisonDescription')}</p>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm border-collapse">
+              <thead>
+                <tr className="bg-primary-50">
+                  <th className="border border-gray-200 px-3 py-2 text-left text-gray-700">{t('comparisonParam')}</th>
+                  {result.comparisonScenarios.map((s, i) => (
+                    <th key={i} className="border border-gray-200 px-3 py-2 text-center text-gray-700 min-w-[140px]">
+                      <div className="font-bold">{t('downPayment')} {s.downPaymentPercent}%</div>
+                      <div className="text-xs text-gray-500">{t('rate')} {(s.interestRate1 * 100).toFixed(0)}% / {(s.interestRate2 * 100).toFixed(0)}%</div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td className="border border-gray-200 px-3 py-2 text-gray-700">{t('comparisonDownPayment')}</td>
+                  {result.comparisonScenarios.map((s, i) => (
+                    <td key={i} className="border border-gray-200 px-3 py-2 text-center font-medium">{formatCurrency(s.downPayment)}</td>
+                  ))}
+                </tr>
+                <tr className="bg-gray-50">
+                  <td className="border border-gray-200 px-3 py-2 text-gray-700">{t('comparisonLoanAmount')}</td>
+                  {result.comparisonScenarios.map((s, i) => (
+                    <td key={i} className="border border-gray-200 px-3 py-2 text-center font-medium">{formatCurrency(s.loanAmount)}</td>
+                  ))}
+                </tr>
+                <tr>
+                  <td className="border border-gray-200 px-3 py-2 text-gray-700">{t('comparisonPayment1')}</td>
+                  {result.comparisonScenarios.map((s, i) => (
+                    <td key={i} className="border border-gray-200 px-3 py-2 text-center font-semibold text-primary-700">{formatCurrency(s.monthlyPayment1)}</td>
+                  ))}
+                </tr>
+                {result.comparisonScenarios.some(s => s.monthlyPayment2 > 0) && (
+                  <tr className="bg-gray-50">
+                    <td className="border border-gray-200 px-3 py-2 text-gray-700">{t('comparisonPayment2')}</td>
+                    {result.comparisonScenarios.map((s, i) => (
+                      <td key={i} className="border border-gray-200 px-3 py-2 text-center font-semibold text-primary-700">{s.monthlyPayment2 > 0 ? formatCurrency(s.monthlyPayment2) : '—'}</td>
+                    ))}
+                  </tr>
+                )}
+                <tr>
+                  <td className="border border-gray-200 px-3 py-2 text-gray-700">{t('comparisonTotalInterest')}</td>
+                  {result.comparisonScenarios.map((s, i) => (
+                    <td key={i} className="border border-gray-200 px-3 py-2 text-center text-orange-600">{formatCurrency(s.totalInterest)}</td>
+                  ))}
+                </tr>
+                <tr className="bg-primary-50 font-bold">
+                  <td className="border border-gray-200 px-3 py-2 text-gray-800">{t('comparisonTotalPayment')}</td>
+                  {result.comparisonScenarios.map((s, i) => (
+                    <td key={i} className="border border-gray-200 px-3 py-2 text-center text-primary-800">{formatCurrency(s.totalPayment)}</td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import type { CalculatorInput, CalculationResult, AdditionalPayment } from './types'
+import type { CalculatorInput, CalculationResult, AdditionalPayment, ComparisonScenario } from './types'
 
 export function calculateNormativeArea(familySize: number, propertyType: 'apartment' | 'house'): number {
   const baseArea = propertyType === 'apartment' ? 52.5 : 62.5
@@ -130,7 +130,9 @@ export function calculatePaymentSchedule(
   const firstPeriodMonths = Math.min(120, termMonths)
   const secondPeriodMonths = termMonths > 120 ? termMonths - 120 : 0
   
-  const payment1 = calculateMonthlyPayment(loanAmount, rate1, firstPeriodMonths)
+  const payment1 = secondPeriodMonths > 0
+    ? calculateMonthlyPayment(loanAmount, rate1, termMonths)
+    : calculateMonthlyPayment(loanAmount, rate1, firstPeriodMonths)
   
   let remainingBalance = loanAmount
   let totalInterest = 0
@@ -144,7 +146,7 @@ export function calculatePaymentSchedule(
   
   let payment2 = 0
   
-  if (secondPeriodMonths > 0 && remainingBalance > 0) {
+  if (secondPeriodMonths > 0 && remainingBalance > 1) {
     const monthlyRate2 = rate2 / 12
     payment2 = calculateMonthlyPayment(remainingBalance, rate2, secondPeriodMonths)
     
@@ -159,6 +161,52 @@ export function calculatePaymentSchedule(
   const totalPayment = loanAmount + totalInterest
   
   return { payment1, payment2, totalInterest, totalPayment }
+}
+
+export function generateComparisonScenarios(
+  totalCost: number,
+  additionalPaymentsTotal: number,
+  termMonths: number
+): ComparisonScenario[] {
+  const scenarios: ComparisonScenario[] = []
+
+  const downPaymentRates = [20, 10]
+  const interestRates = [
+    { rate1: 0.03, rate2: 0.06 },
+    { rate1: 0.07, rate2: 0.10 }
+  ]
+
+  for (const dpPercent of downPaymentRates) {
+    for (const rates of interestRates) {
+      const baseDownPayment = totalCost * (dpPercent / 100)
+      const fullDownPayment = baseDownPayment + additionalPaymentsTotal
+      const loanAmount = totalCost - fullDownPayment
+
+      if (loanAmount <= 0) continue
+
+      const schedule = calculatePaymentSchedule(
+        loanAmount,
+        rates.rate1,
+        rates.rate2,
+        termMonths
+      )
+
+      scenarios.push({
+        label: `${dpPercent}% + ${(rates.rate1 * 100).toFixed(0)}%/${(rates.rate2 * 100).toFixed(0)}%`,
+        downPaymentPercent: dpPercent,
+        interestRate1: rates.rate1,
+        interestRate2: rates.rate2,
+        downPayment: fullDownPayment,
+        loanAmount,
+        monthlyPayment1: schedule.payment1,
+        monthlyPayment2: schedule.payment2,
+        totalInterest: schedule.totalInterest,
+        totalPayment: schedule.totalPayment
+      })
+    }
+  }
+
+  return scenarios
 }
 
 export function calculateMortgage(input: CalculatorInput, settings: any): CalculationResult {
@@ -331,6 +379,13 @@ export function calculateMortgage(input: CalculatorInput, settings: any): Calcul
     interestRate2,
     termMonths
   )
+
+  const additionalPaymentsTotal = additionalPayments.reduce((sum, p) => sum + p.amount, 0)
+  const comparisonScenarios = generateComparisonScenarios(
+    input.totalCost,
+    additionalPaymentsTotal,
+    termMonths
+  )
   
   return {
     success: true,
@@ -351,6 +406,7 @@ export function calculateMortgage(input: CalculatorInput, settings: any): Calcul
     excessPrice: priceCheck.excessPrice,
     excessPricePercent: priceCheck.excessPercent,
     warnings,
-    additionalPayments
+    additionalPayments,
+    comparisonScenarios
   }
 }

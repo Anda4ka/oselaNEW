@@ -94,7 +94,18 @@
     "totalInterest": "Total Interest",
     "totalPayment": "Total Payment",
     "warnings": "Warnings",
-    "errors": "Errors"
+    "errors": "Errors",
+    "comparisonTitle": "Scenario Comparison",
+    "comparisonDescription": "Compare payments at different interest rates and down payment options",
+    "comparisonParam": "Parameter",
+    "downPayment": "Down Payment",
+    "rate": "Rate",
+    "comparisonDownPayment": "Down Payment",
+    "comparisonLoanAmount": "Loan Amount",
+    "comparisonPayment1": "Payment (first 10 yrs)",
+    "comparisonPayment2": "Payment (next years)",
+    "comparisonTotalInterest": "Total Interest",
+    "comparisonTotalPayment": "Total Payment"
   },
   "errors": {
     "buildingAgeExceeded": "Building age exceeds limit for your category",

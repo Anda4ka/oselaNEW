@@ -94,7 +94,18 @@
     "totalInterest": "Загальна сума відсотків",
     "totalPayment": "Загальна сума виплат",
     "warnings": "Увага",
-    "errors": "Помилки"
+    "errors": "Помилки",
+    "comparisonTitle": "Порівняння сценаріїв",
+    "comparisonDescription": "Порівняння платежів при різних ставках та початкових внесках",
+    "comparisonParam": "Параметр",
+    "downPayment": "Внесок",
+    "rate": "Ставка",
+    "comparisonDownPayment": "Початковий внесок",
+    "comparisonLoanAmount": "Сума кредиту",
+    "comparisonPayment1": "Платіж (перші 10 р.)",
+    "comparisonPayment2": "Платіж (наступні роки)",
+    "comparisonTotalInterest": "Всього відсотків",
+    "comparisonTotalPayment": "Загальна виплата"
   },
   "errors": {
     "buildingAgeExceeded": "Вік будинку перевищує дозволений для вашої категорії",

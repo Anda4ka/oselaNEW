@@ -94,7 +94,18 @@
     "totalInterest": "Общая сумма процентов",
     "totalPayment": "Общая сумма выплат",
     "warnings": "Внимание",
-    "errors": "Ошибки"
+    "errors": "Ошибки",
+    "comparisonTitle": "Сравнение сценариев",
+    "comparisonDescription": "Сравнение платежей при разных ставках и первоначальных взносах",
+    "comparisonParam": "Параметр",
+    "downPayment": "Взнос",
+    "rate": "Ставка",
+    "comparisonDownPayment": "Первоначальный взнос",
+    "comparisonLoanAmount": "Сумма кредита",
+    "comparisonPayment1": "Платёж (первые 10 л.)",
+    "comparisonPayment2": "Платёж (следующие годы)",
+    "comparisonTotalInterest": "Всего процентов",
+    "comparisonTotalPayment": "Общая выплата"
   },
   "errors": {
     "buildingAgeExceeded": "Возраст дома превышает допустимый для вашей категории",

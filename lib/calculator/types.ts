@@ -35,6 +35,20 @@ export interface CalculationResult {
   buildingAge?: number
   warnings: string[]
   additionalPayments: AdditionalPayment[]
+  comparisonScenarios?: ComparisonScenario[]
+}
+
+export interface ComparisonScenario {
+  label: string
+  downPaymentPercent: number
+  interestRate1: number
+  interestRate2: number
+  downPayment: number
+  loanAmount: number
+  monthlyPayment1: number
+  monthlyPayment2: number
+  totalInterest: number
+  totalPayment: number
 }
 
 export interface AdditionalPayment {
