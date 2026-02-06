@@ -47,7 +47,10 @@ export async function POST(request: NextRequest) {
     
     const settings = {
       ...loanSettings,
-      pricePerSqM: regionalPrice.pricePerSqM
+      pricePerSqM: regionalPrice.pricePerSqM,
+      maxBuildingAge: userCategory.maxBuildingAge,
+      ratePeriod1: userCategory.ratePeriod1,
+      ratePeriod2: userCategory.ratePeriod2
     }
     
     const result = calculateMortgage(input, settings)

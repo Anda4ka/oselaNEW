@@ -24,6 +24,7 @@ interface SettingsData {
 
 export default function AdminPanel() {
   const t = useTranslations('admin')
+  const tCommon = useTranslations('common')
   const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -159,7 +160,8 @@ export default function AdminPanel() {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
+                autoComplete="username"
                 required
               />
             </div>
@@ -171,7 +173,8 @@ export default function AdminPanel() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
+                autoComplete="current-password"
                 required
               />
             </div>
@@ -180,7 +183,7 @@ export default function AdminPanel() {
               disabled={loading}
               className="w-full px-4 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? t('common.loading') : t('loginButton')}
+              {loading ? tCommon('loading') : t('loginButton')}
             </button>
           </form>
         </div>
@@ -191,7 +194,7 @@ export default function AdminPanel() {
   if (!settings) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-primary-50 to-white flex items-center justify-center">
-        <div className="text-xl">{t('common.loading')}</div>
+        <div className="text-xl text-gray-600">{tCommon('loading')}</div>
       </div>
     )
   }
@@ -234,7 +237,7 @@ export default function AdminPanel() {
                   step="0.01"
                   value={(settings.loanSettings.ratePeriod1 * 100).toFixed(2)}
                   onChange={(e) => updateLoanSetting('ratePeriod1', parseFloat(e.target.value) / 100)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
                 />
               </div>
               <div>
@@ -246,7 +249,7 @@ export default function AdminPanel() {
                   step="0.01"
                   value={(settings.loanSettings.ratePeriod2 * 100).toFixed(2)}
                   onChange={(e) => updateLoanSetting('ratePeriod2', parseFloat(e.target.value) / 100)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
                 />
               </div>
               <div>
@@ -257,7 +260,7 @@ export default function AdminPanel() {
                   type="number"
                   value={settings.loanSettings.minLoanAmount}
                   onChange={(e) => updateLoanSetting('minLoanAmount', parseInt(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
                 />
               </div>
               <div>
@@ -268,7 +271,7 @@ export default function AdminPanel() {
                   type="number"
                   value={settings.loanSettings.maxLoanAmount}
                   onChange={(e) => updateLoanSetting('maxLoanAmount', parseInt(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
                 />
               </div>
               <div>
@@ -279,7 +282,7 @@ export default function AdminPanel() {
                   type="number"
                   value={settings.loanSettings.downPaymentPercent.toFixed(1)}
                   onChange={(e) => updateLoanSetting('downPaymentPercent', parseFloat(e.target.value))}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
                 />
               </div>
             </div>
@@ -291,20 +294,20 @@ export default function AdminPanel() {
               <table className="w-full">
                 <thead>
                   <tr className="border-b">
-                    <th className="text-left py-2 px-4">{t('region')}</th>
-                    <th className="text-left py-2 px-4">{t('pricePerSqm')}</th>
+                    <th className="text-left py-2 px-4 text-gray-700">{t('region')}</th>
+                    <th className="text-left py-2 px-4 text-gray-700">{t('pricePerSqm')}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {settings.regionalPrices.map((price) => (
                     <tr key={price.id} className="border-b">
-                      <td className="py-2 px-4">{price.regionUk}</td>
+                      <td className="py-2 px-4 text-gray-800">{price.regionUk}</td>
                       <td className="py-2 px-4">
                         <input
                           type="number"
                           value={price.pricePerSqM}
                           onChange={(e) => updateRegionalPrice(price.id, parseInt(e.target.value))}
-                          className="w-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+                          className="w-32 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
                         />
                       </td>
                     </tr>
@@ -320,7 +323,7 @@ export default function AdminPanel() {
               disabled={loading}
               className="px-6 py-3 bg-primary-500 text-white rounded-md hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed text-lg font-semibold"
             >
-              {loading ? t('common.loading') : t('common.save')}
+              {loading ? tCommon('loading') : tCommon('save')}
             </button>
           </div>
         </div>

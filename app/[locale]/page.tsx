@@ -1,10 +1,13 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function HomePage() {
   const t = useTranslations('home')
+  const locale = useLocale()
+  const router = useRouter()
 
   const categories = [
     { key: 'military', rate: '3%', color: 'bg-blue-500' },
@@ -30,6 +33,18 @@ export default function HomePage() {
     { key: 'step3', num: '3' },
   ]
 
+  const locales = [
+    { code: 'uk', label: 'UA' },
+    { code: 'en', label: 'EN' },
+    { code: 'ru', label: 'RU' },
+  ]
+
+  const switchLocale = (newLocale: string) => {
+    const currentPath = window.location.pathname
+    const pathWithoutLocale = currentPath.replace(/^\/(uk|en|ru)/, '')
+    router.push(`/${newLocale}${pathWithoutLocale || ''}`)
+  }
+
   return (
     <div className="min-h-screen">
       <header className="bg-white shadow-sm sticky top-0 z-50">
@@ -38,21 +53,36 @@ export default function HomePage() {
             <div className="flex items-center space-x-2">
               <span className="text-2xl font-bold text-primary-800">єОселя</span>
             </div>
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-4">
               <Link 
-                href="/uk/calculator" 
-                className="text-gray-700 hover:text-primary-600 transition"
+                href={`/${locale}/calculator`} 
+                className="hidden sm:inline text-gray-700 hover:text-primary-600 transition"
               >
                 {t('nav.calculator')}
               </Link>
               <Link 
-                href="/uk/admin" 
-                className="text-gray-700 hover:text-primary-600 transition"
+                href={`/${locale}/admin`} 
+                className="hidden sm:inline text-gray-700 hover:text-primary-600 transition"
               >
                 {t('nav.admin')}
               </Link>
+              <div className="flex items-center space-x-1 border-l pl-4 ml-2">
+                {locales.map((loc) => (
+                  <button
+                    key={loc.code}
+                    onClick={() => switchLocale(loc.code)}
+                    className={`px-2 py-1 text-sm rounded ${
+                      locale === loc.code
+                        ? 'bg-primary-600 text-white'
+                        : 'text-gray-600 hover:bg-gray-100'
+                    }`}
+                  >
+                    {loc.label}
+                  </button>
+                ))}
+              </div>
               <Link 
-                href="/uk/calculator" 
+                href={`/${locale}/calculator`} 
                 className="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700 transition"
               >
                 {t('calculateNow')}
@@ -64,13 +94,13 @@ export default function HomePage() {
 
       <section className="bg-gradient-to-b from-primary-600 to-primary-800 text-white py-20">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-6">{t('hero.title')}</h1>
-          <p className="text-xl mb-8 max-w-2xl mx-auto opacity-90">
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">{t('hero.title')}</h1>
+          <p className="text-lg md:text-xl mb-8 max-w-2xl mx-auto opacity-90">
             {t('hero.subtitle')}
           </p>
-          <div className="flex justify-center space-x-4">
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link 
-              href="/uk/calculator" 
+              href={`/${locale}/calculator`} 
               className="px-8 py-4 bg-white text-primary-700 rounded-lg font-semibold text-lg hover:bg-gray-100 transition shadow-lg"
             >
               {t('hero.calculateBtn')}
@@ -92,7 +122,7 @@ export default function HomePage() {
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
             {t('categories.title')}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {categories.map((cat) => (
               <div key={cat.key} className="bg-white rounded-lg shadow-md p-6 hover:shadow-xl transition">
                 <div className={`inline-block px-3 py-1 ${cat.color} text-white rounded-full text-sm font-semibold mb-3`}>
@@ -112,7 +142,7 @@ export default function HomePage() {
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">
             {t('features.title')}
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
               <div key={index} className="text-center">
                 <div className="text-5xl mb-4">{feature.icon}</div>
@@ -160,7 +190,7 @@ export default function HomePage() {
           <h2 className="text-3xl font-bold mb-6">{t('cta.title')}</h2>
           <p className="text-xl mb-8 opacity-90">{t('cta.subtitle')}</p>
           <Link 
-            href="/uk/calculator" 
+            href={`/${locale}/calculator`} 
             className="inline-block px-8 py-4 bg-white text-primary-700 rounded-lg font-semibold text-lg hover:bg-gray-100 transition shadow-lg"
           >
             {t('cta.btn')}

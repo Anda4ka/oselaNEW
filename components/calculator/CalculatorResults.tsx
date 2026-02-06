@@ -9,14 +9,16 @@ interface CalculatorResultsProps {
 
 export default function CalculatorResults({ result }: CalculatorResultsProps) {
   const t = useTranslations('results')
+  const tErrors = useTranslations('errors')
 
   if (!result.success) {
+    const errorKey = result.error?.replace('errors.', '') || 'invalidInput'
     return (
       <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-4xl mx-auto">
         <h3 className="text-lg font-semibold text-red-800 mb-2">
           {t('status')}: {t('notAllowed')}
         </h3>
-        <p className="text-red-700">{result.error}</p>
+        <p className="text-red-700">{tErrors(errorKey)}</p>
       </div>
     )
   }

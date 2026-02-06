@@ -39,6 +39,7 @@ async function main() {
   // 2. Категорії користувачів
   const userCategories = [
     { code: 'military', nameUk: 'Військовослужбовець за контрактом', nameRu: 'Военнослужащий по контракту', nameEn: 'Contract Military', ratePeriod1: 0.03, ratePeriod2: 0.06, maxBuildingAge: 3 },
+    { code: 'security', nameUk: 'Працівник сектору безпеки', nameRu: 'Работник сектора безопасности', nameEn: 'Security Sector Employee', ratePeriod1: 0.03, ratePeriod2: 0.06, maxBuildingAge: 3 },
     { code: 'medic', nameUk: 'Медичний працівник (державний/комунальний)', nameRu: 'Медицинский работник (государственный/коммунальный)', nameEn: 'Healthcare Worker (Public)', ratePeriod1: 0.03, ratePeriod2: 0.06, maxBuildingAge: 3 },
     { code: 'teacher', nameUk: 'Педагог (державний/комунальний)', nameRu: 'Педагог (государственный/коммунальный)', nameEn: 'Teacher (Public)', ratePeriod1: 0.03, ratePeriod2: 0.06, maxBuildingAge: 3 },
     { code: 'scientist', nameUk: 'Науковець (державний/комунальний)', nameRu: 'Ученый (государственный/коммунальный)', nameEn: 'Scientist (Public)', ratePeriod1: 0.03, ratePeriod2: 0.06, maxBuildingAge: 3 },

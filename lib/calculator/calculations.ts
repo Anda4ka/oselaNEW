@@ -20,9 +20,10 @@ export function calculateLimitPrice(basePrice: number, settlementType: 'major' |
 export function calculateDownPayment(
   totalCost: number,
   age: number,
-  downPaymentRate: number
+  downPaymentPercent: number,
+  downPaymentPercent26: number
 ): number {
-  const rate = age < 26 ? 0.10 : downPaymentRate
+  const rate = age < 26 ? downPaymentPercent26 / 100 : downPaymentPercent / 100
   return totalCost * rate
 }
 
@@ -31,7 +32,7 @@ export function calculateMonthlyPayment(
   annualRate: number,
   termMonths: number
 ): number {
-  if (loanAmount <= 0 || annualRate <= 0) return 0
+  if (loanAmount <= 0 || annualRate <= 0 || termMonths <= 0) return 0
   
   const monthlyRate = annualRate / 12
   const payment = (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, termMonths)) /
@@ -125,9 +126,10 @@ export function calculatePaymentSchedule(
   termMonths: number
 ): { payment1: number; payment2: number; totalInterest: number; totalPayment: number } {
   const monthlyRate1 = rate1 / 12
-  const monthlyRate2 = rate2 / 12
   
   const firstPeriodMonths = Math.min(120, termMonths)
+  const secondPeriodMonths = termMonths > 120 ? termMonths - 120 : 0
+  
   const payment1 = calculateMonthlyPayment(loanAmount, rate1, firstPeriodMonths)
   
   let remainingBalance = loanAmount
@@ -142,8 +144,8 @@ export function calculatePaymentSchedule(
   
   let payment2 = 0
   
-  if (termMonths > 120) {
-    const secondPeriodMonths = termMonths - 120
+  if (secondPeriodMonths > 0 && remainingBalance > 0) {
+    const monthlyRate2 = rate2 / 12
     payment2 = calculateMonthlyPayment(remainingBalance, rate2, secondPeriodMonths)
     
     for (let i = 0; i < secondPeriodMonths; i++) {
@@ -234,7 +236,12 @@ export function calculateMortgage(input: CalculatorInput, settings: any): Calcul
     }
   }
   
-  let downPayment = calculateDownPayment(input.totalCost, input.age, settings.downPaymentPercent / 100)
+  let downPayment = calculateDownPayment(
+    input.totalCost,
+    input.age,
+    settings.downPaymentPercent,
+    settings.downPaymentPercent26 || 10
+  )
   
   if (areaCheck.excessArea > 0) {
     downPayment += areaCheck.payment

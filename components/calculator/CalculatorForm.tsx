@@ -6,12 +6,14 @@ import type { CalculatorInput } from '@/lib/calculator/types'
 
 interface CalculatorFormProps {
   onCalculate: (input: CalculatorInput) => void
+  loading?: boolean
 }
 
-export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
+export default function CalculatorForm({ onCalculate, loading }: CalculatorFormProps) {
   const t = useTranslations('calculator')
   const tCommon = useTranslations('common')
   const [step, setStep] = useState(1)
+  const [validationError, setValidationError] = useState('')
   const [input, setInput] = useState<Partial<CalculatorInput>>({
     category: 'military',
     propertyType: 'apartment',
@@ -50,19 +52,66 @@ export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
     { code: 'Chernihiv', nameUk: 'Чернігівська' },
   ]
 
+  const validateStep = (currentStep: number): boolean => {
+    setValidationError('')
+    switch (currentStep) {
+      case 1:
+        if (!input.category) {
+          setValidationError(tCommon('required'))
+          return false
+        }
+        return true
+      case 2:
+        if (!input.age || input.age < 18 || input.age > 70) {
+          setValidationError(t('family.age') + ': 18-70')
+          return false
+        }
+        if (!input.familySize || input.familySize < 1 || input.familySize > 10) {
+          setValidationError(t('family.familySize') + ': 1-10')
+          return false
+        }
+        return true
+      case 3:
+        if (!input.region) {
+          setValidationError(t('property.region') + ' - ' + tCommon('required'))
+          return false
+        }
+        if (!input.area || input.area < 10) {
+          setValidationError(t('property.area') + ' - ' + tCommon('required'))
+          return false
+        }
+        if (!input.totalCost || input.totalCost < 100000) {
+          setValidationError(t('property.totalCost') + ' - ' + tCommon('required'))
+          return false
+        }
+        if (input.buildingAge === undefined || input.buildingAge === null || input.buildingAge < 0) {
+          setValidationError(t('property.buildingAge') + ' - ' + tCommon('required'))
+          return false
+        }
+        return true
+      case 4:
+        if (!input.loanTerm || input.loanTerm < 1 || input.loanTerm > 20) {
+          setValidationError(t('loan.loanTerm') + ': 1-20')
+          return false
+        }
+        return true
+      default:
+        return true
+    }
+  }
+
   const handleNext = () => {
+    if (!validateStep(step)) return
+
     if (step < 4) {
       setStep(step + 1)
     } else {
-      if (!input.age || !input.familySize || !input.area || !input.totalCost || !input.buildingAge || !input.region || !input.settlementType) {
-        alert(t('common.required'))
-        return
-      }
       onCalculate(input as CalculatorInput)
     }
   }
 
   const handleBack = () => {
+    setValidationError('')
     if (step > 1) {
       setStep(step - 1)
     }
@@ -83,21 +132,31 @@ export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
             />
           ))}
         </div>
-        <div className="flex justify-between text-sm text-gray-600">
+        <div className="hidden sm:flex justify-between text-sm text-gray-600">
           {[1, 2, 3, 4].map((s) => (
             <span key={s} className={step === s ? 'font-bold text-primary-600' : ''}>
               {t(`steps.${s}`)}
             </span>
           ))}
         </div>
+        <div className="sm:hidden text-center text-sm font-bold text-primary-600">
+          {t(`steps.${step}`)} ({step}/4)
+        </div>
       </div>
+
+      {validationError && (
+        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded text-red-700 text-sm">
+          {validationError}
+        </div>
+      )}
 
       {step === 1 && (
         <div className="space-y-4">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">{t('category.label')}</h3>
+          <p className="text-sm text-gray-500 mb-2">{t('category.hint')}</p>
           <div className="grid grid-cols-1 gap-3">
             {categories.map((cat) => (
-              <label key={cat} className="flex items-start space-x-3 p-3 border rounded hover:bg-gray-50 cursor-pointer">
+              <label key={cat} className={`flex items-start space-x-3 p-3 border rounded hover:bg-gray-50 cursor-pointer ${input.category === cat ? 'border-primary-500 bg-primary-50' : ''}`}>
                 <input
                   type="radio"
                   value={cat}
@@ -117,7 +176,7 @@ export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
           <h3 className="text-lg font-semibold text-gray-800 mb-4">{t('steps.2')}</h3>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('family.age')}
+              {t('family.age')} *
             </label>
             <input
               type="number"
@@ -126,12 +185,13 @@ export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
               value={input.age || ''}
               onChange={(e) => setInput({ ...input, age: parseInt(e.target.value) })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
+              placeholder="18-70"
             />
             <p className="mt-1 text-sm text-gray-500">{t('family.ageHint')}</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('family.familySize')}
+              {t('family.familySize')} *
             </label>
             <input
               type="number"
@@ -140,6 +200,7 @@ export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
               value={input.familySize || ''}
               onChange={(e) => setInput({ ...input, familySize: parseInt(e.target.value) })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
+              placeholder="1-10"
             />
             <p className="mt-1 text-sm text-gray-500">{t('family.familySizeHint')}</p>
           </div>
@@ -154,7 +215,7 @@ export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
               {t('property.propertyType')}
             </label>
             <div className="flex space-x-4">
-              <label className="flex items-center space-x-2">
+              <label className={`flex items-center space-x-2 p-3 border rounded cursor-pointer ${input.propertyType === 'apartment' ? 'border-primary-500 bg-primary-50' : ''}`}>
                 <input
                   type="radio"
                   value="apartment"
@@ -163,7 +224,7 @@ export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
                 />
                 <span className="text-gray-700">{t('property.apartment')}</span>
               </label>
-              <label className="flex items-center space-x-2">
+              <label className={`flex items-center space-x-2 p-3 border rounded cursor-pointer ${input.propertyType === 'house' ? 'border-primary-500 bg-primary-50' : ''}`}>
                 <input
                   type="radio"
                   value="house"
@@ -176,14 +237,14 @@ export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('property.region')}
+              {t('property.region')} *
             </label>
             <select
               value={input.region || ''}
               onChange={(e) => setInput({ ...input, region: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
             >
-              <option value="">{t('common.required')}</option>
+              <option value="">{tCommon('required')}</option>
               {regions.map((region) => (
                 <option key={region.code} value={region.code}>
                   {region.nameUk}
@@ -196,35 +257,37 @@ export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
               {t('property.settlementType')}
             </label>
             <div className="space-y-2">
-              <label className="flex items-center space-x-2">
+              <label className={`flex items-start space-x-2 p-3 border rounded cursor-pointer ${input.settlementType === 'major' ? 'border-primary-500 bg-primary-50' : ''}`}>
                 <input
                   type="radio"
                   value="major"
                   checked={input.settlementType === 'major'}
                   onChange={(e) => setInput({ ...input, settlementType: e.target.value as 'major' | 'other' })}
+                  className="mt-1"
                 />
-                <span className="text-gray-700">{t('property.settlementTypeMajor')}</span>
+                <span className="text-gray-700 text-sm">{t('property.settlementTypeMajor')}</span>
               </label>
-              <label className="flex items-center space-x-2">
+              <label className={`flex items-start space-x-2 p-3 border rounded cursor-pointer ${input.settlementType === 'other' ? 'border-primary-500 bg-primary-50' : ''}`}>
                 <input
                   type="radio"
                   value="other"
                   checked={input.settlementType === 'other'}
                   onChange={(e) => setInput({ ...input, settlementType: e.target.value as 'major' | 'other' })}
+                  className="mt-1"
                 />
-                <span className="text-gray-700">{t('property.settlementTypeOther')}</span>
+                <span className="text-gray-700 text-sm">{t('property.settlementTypeOther')}</span>
               </label>
             </div>
             <p className="mt-1 text-sm text-gray-500">{t('property.settlementTypeHint')}</p>
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('property.area')}
+              {t('property.area')} ({tCommon('sqm')}) *
             </label>
             <input
               type="number"
-              min="20"
-              max="150"
+              min="10"
+              max="200"
               step="0.1"
               value={input.area || ''}
               onChange={(e) => setInput({ ...input, area: parseFloat(e.target.value) })}
@@ -233,11 +296,11 @@ export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('property.totalCost')}
+              {t('property.totalCost')} ({tCommon('currency')}) *
             </label>
             <input
               type="number"
-              min="250000"
+              min="100000"
               max="10000000"
               step="1000"
               value={input.totalCost || ''}
@@ -247,13 +310,13 @@ export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('property.buildingAge')}
+              {t('property.buildingAge')} ({tCommon('years')}) *
             </label>
             <input
               type="number"
               min="0"
               max="20"
-              value={input.buildingAge || ''}
+              value={input.buildingAge ?? ''}
               onChange={(e) => setInput({ ...input, buildingAge: parseInt(e.target.value) })}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 text-gray-900"
             />
@@ -267,7 +330,7 @@ export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
           <h3 className="text-lg font-semibold text-gray-800 mb-4">{t('steps.4')}</h3>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              {t('loan.loanTerm')}
+              {t('loan.loanTerm')} ({tCommon('years')}) *
             </label>
             <input
               type="number"
@@ -292,9 +355,20 @@ export default function CalculatorForm({ onCalculate }: CalculatorFormProps) {
         </button>
         <button
           onClick={handleNext}
-          className="px-6 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600"
+          disabled={loading}
+          className="px-6 py-2 bg-primary-500 text-white rounded-md hover:bg-primary-600 disabled:opacity-50 disabled:cursor-not-allowed flex items-center space-x-2"
         >
-          {step === 4 ? tCommon('calculate') : tCommon('next')}
+          {loading ? (
+            <>
+              <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              </svg>
+              <span>{tCommon('loading')}</span>
+            </>
+          ) : (
+            <span>{step === 4 ? tCommon('calculate') : tCommon('next')}</span>
+          )}
         </button>
       </div>
     </div>

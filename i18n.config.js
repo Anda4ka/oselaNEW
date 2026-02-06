@@ -1,27 +1,34 @@
 const { getRequestConfig } = require('next-intl/server');
-const { notFound } = require('next/navigation');
 
 const locales = ['uk', 'ru', 'en'];
 
-async function loadMessages(locale) {
+module.exports = getRequestConfig(async ({ requestLocale }) => {
+  const locale = await requestLocale;
+
+  if (!locale || !locales.includes(locale)) {
+    return {
+      locale: 'uk',
+      messages: require('./locales/uk.json'),
+    };
+  }
+
+  let messages;
   switch (locale) {
     case 'uk':
-      return require('./locales/uk.json');
+      messages = require('./locales/uk.json');
+      break;
     case 'ru':
-      return require('./locales/ru.json');
+      messages = require('./locales/ru.json');
+      break;
     case 'en':
-      return require('./locales/en.json');
+      messages = require('./locales/en.json');
+      break;
     default:
-      throw new Error(`Unsupported locale: ${locale}`);
+      messages = require('./locales/uk.json');
   }
-}
-
-module.exports = getRequestConfig(async ({ locale }) => {
-  if (!locales.includes(locale)) notFound();
-
-  const messages = await loadMessages(locale);
 
   return {
+    locale,
     messages,
   };
 });

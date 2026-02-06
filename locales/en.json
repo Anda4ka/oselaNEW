@@ -22,6 +22,7 @@
   },
   "calculator": {
     "title": "Mortgage Calculator",
+    "description": "Calculate mortgage terms under the «єОселя» program",
     "steps": {
       "1": "User Category",
       "2": "Family Data",
