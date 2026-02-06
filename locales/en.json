@@ -1,0 +1,207 @@
+{
+  "common": {
+    "appName": "єОселя",
+    "title": "Mortgage Calculator",
+    "description": "Calculator of state mortgage housing program",
+    "calculate": "Calculate",
+    "clear": "Clear",
+    "next": "Next",
+    "back": "Back",
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "required": "Required",
+    "currency": "UAH",
+    "sqm": "m²",
+    "years": "years",
+    "months": "months"
+  },
+  "calculator": {
+    "title": "Mortgage Calculator",
+    "steps": {
+      "1": "User Category",
+      "2": "Family Data",
+      "3": "Property Parameters",
+      "4": "Loan Parameters"
+    },
+    "category": {
+      "label": "Your Category",
+      "hint": "Select category you belong to",
+      "military": "Contract Military Serviceman",
+      "security": "Security Sector Employee",
+      "medic": "Healthcare Worker (Public)",
+      "teacher": "Teacher (Public)",
+      "scientist": "Scientist (Public)",
+      "idp": "Internally Displaced Person (IDP)",
+      "veteran": "War Veteran",
+      "regular": "Other Citizen without Housing"
+    },
+    "family": {
+      "age": "Your Age",
+      "ageHint": "If you are under 26, down payment can be 10% instead of 20%",
+      "familySize": "Family Size",
+      "familySizeHint": "Including you"
+    },
+    "property": {
+      "propertyType": "Property Type",
+      "apartment": "Apartment",
+      "house": "House",
+      "region": "Region",
+      "settlementType": "Settlement Type",
+      "settlementTypeMajor": "Kyiv, Dnipro, Lviv, Odesa, Kharkiv or regional center >300k",
+      "settlementTypeOther": "Other settlements",
+      "settlementTypeHint": "This affects limit price coefficient (2.0 or 1.75)",
+      "area": "Total Area",
+      "totalCost": "Total Property Cost",
+      "buildingAge": "Building Age",
+      "buildingAgeHint": "For most categories - up to 3 years, for IDP - up to 10 years"
+    },
+    "loan": {
+      "loanTerm": "Loan Term",
+      "loanTermHint": "From 1 to 20 years"
+    }
+  },
+  "results": {
+    "title": "Calculation Results",
+    "eligibilityStatus": "Eligibility Status",
+    "areaAnalysis": "Area Analysis",
+    "priceAnalysis": "Price Analysis",
+    "financialSummary": "Financial Summary",
+    "monthlyPayments": "Monthly Payments",
+    "normativeArea": "Normative Area",
+    "actualArea": "Actual Area",
+    "excessArea": "Excess Area",
+    "excessPercent": "Excess Percentage",
+    "status": "Status",
+    "allowed": "Allowed",
+    "notAllowed": "Not Allowed",
+    "limitPrice": "Limit Price per 1 m²",
+    "actualPrice": "Actual Price per 1 m²",
+    "excessPrice": "Excess per 1 m²",
+    "propertyCost": "Property Cost",
+    "baseDownPayment": "Base Down Payment (20% or 10%)",
+    "areaExcessPayment": "+ Payment for Excess Area",
+    "priceExcessPayment": "+ Payment for Price Excess",
+    "totalDownPayment": "= Total Down Payment",
+    "loanAmount": "Loan Amount",
+    "monthlyPaymentFirstPeriod": "First 10 Years (Rate 3%/7%)",
+    "monthlyPaymentSecondPeriod": "Next Years (Rate 6%/10%)",
+    "totalInterest": "Total Interest",
+    "totalPayment": "Total Payment",
+    "warnings": "Warnings",
+    "errors": "Errors"
+  },
+  "errors": {
+    "buildingAgeExceeded": "Building age exceeds limit for your category",
+    "areaExceeded": "Area excess greater than 10% is not allowed",
+    "areaExceededOldBuilding": "Housing older than 3 years cannot exceed normative area",
+    "priceExceeded": "Price excess greater than 10% from limit is not allowed",
+    "loanTooSmall": "Loan amount is less than minimum 200,000 UAH",
+    "loanTooLarge": "Loan amount exceeds maximum 5,000,000 UAH",
+    "invalidInput": "Invalid input data",
+    "missingFields": "All required fields must be filled"
+  },
+  "admin": {
+    "title": "Admin Panel",
+    "login": "Login to Admin Panel",
+    "username": "Username",
+    "password": "Password",
+    "loginButton": "Login",
+    "logout": "Logout",
+    "settings": "Settings",
+    "regionalPrices": "Regional Prices",
+    "loanSettings": "Loan Settings",
+    "saveSuccess": "Settings saved successfully",
+    "region": "Region",
+    "pricePerSqm": "Price per m² (UAH)",
+    "ratePeriod1": "Period 1 Rate",
+    "ratePeriod2": "Period 2 Rate",
+    "minLoanAmount": "Min Loan Amount",
+    "maxLoanAmount": "Max Loan Amount",
+    "downPaymentPercent": "Down Payment (%)",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmPassword": "Confirm Password"
+  },
+  "home": {
+    "nav": {
+      "calculator": "Calculator",
+      "admin": "Admin Panel"
+    },
+    "calculateNow": "Calculate Now",
+    "hero": {
+      "title": "State Mortgage Program \"єОселя\"",
+      "subtitle": "Affordable housing for Ukrainians at low interest - from 3% per annum",
+      "calculateBtn": "Calculate Mortgage",
+      "learnMore": "Learn More"
+    },
+    "categories": {
+      "title": "Participant Categories and Rates",
+      "military": "Contract Military Serviceman",
+      "security": "Security Sector Employee",
+      "medic": "Healthcare Worker",
+      "teacher": "Teacher",
+      "scientist": "Scientist",
+      "idp": "Internally Displaced Person (IDP)",
+      "veteran": "War Veteran",
+      "regular": "Other Citizen without Housing"
+    },
+    "features": {
+      "title": "Program Benefits",
+      "feature1": {
+        "title": "Low Interest Rate",
+        "description": "Rate from 3% per annum for preferential categories"
+      },
+      "feature2": {
+        "title": "Long Term",
+        "description": "Loan up to 20 years with comfortable repayment conditions"
+      },
+      "feature3": {
+        "title": "Easy Application",
+        "description": "Submit application via \"Diia\" app in 10 minutes"
+      },
+      "feature4": {
+        "title": "Fast Decision",
+        "description": "Application review within 10 working days"
+      }
+    },
+    "howItWorks": {
+      "title": "How to Get a Mortgage?",
+      "step1": {
+        "title": "Check Your Category",
+        "description": "Find out if you belong to a preferential category and what rate is available to you"
+      },
+      "step2": {
+        "title": "Calculate Terms",
+        "description": "Use the calculator to calculate monthly payment and down payment"
+      },
+      "step3": {
+        "title": "Submit Application",
+        "description": "Submit application via \"Diia\" app and get bank decision"
+      }
+    },
+    "cta": {
+      "title": "Ready to Calculate Your Mortgage?",
+      "subtitle": "Use our calculator in 2 minutes",
+      "btn": "Calculate Now"
+    },
+    "footer": {
+      "rights": "All rights reserved",
+      "official": "Official program site: eoselia.diia.gov.ua"
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "calculator": "Calculator",
+    "admin": "Admin Panel"
+  },
+  "footer": {
+    "rights": "All rights reserved",
+    "official": "Official program site: eoselia.diia.gov.ua"
+  }
+}
