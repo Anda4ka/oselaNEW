@@ -29,8 +29,9 @@ A Ukrainian mortgage calculator for the "єОселя" government housing progra
 - **Normative area**: 52.5 m² (apartment) / 62.5 m² (house) for 1-2 people, +21 m² per additional person, max 115.5/125.5 m²
 - **Area excess**: Up to 10% allowed for buildings ≤3 years old (excess paid from own funds). >10% or buildings >3 years → rejected with detailed explanation
 - **Price excess**: Up to 10% above limit price allowed (excess paid from own funds). >10% → rejected
-- **Two-period rates**: Period 1 (first 10 years) at 3%/7%, Period 2 (remaining years) at 6%/10%
+- **Two-period rates**: Period 1 (first 10 years) at 3%/7%, Period 2 (remaining years) at 6%/10%. For terms >10 years, payment1 is calculated using full-term amortization at rate1, then remaining balance is re-amortized at rate2.
 - **Down payment**: 20% standard, 10% for age <26
+- **Comparison scenarios**: Results include a comparison table showing 4 scenarios: 20%+3%, 20%+7%, 10%+3%, 10%+7% side by side with monthly payments, interest, and totals
 - **Error display**: Rejection reasons show detailed breakdown with normative vs actual values, percentages, and actionable suggestions
 
 ## Running
