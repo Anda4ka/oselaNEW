@@ -30,6 +30,9 @@ export interface CalculationResult {
   excessAreaPercent: number
   excessPrice: number
   excessPricePercent: number
+  maxAreaExcessPercent?: number
+  maxBuildingAge?: number
+  buildingAge?: number
   warnings: string[]
   additionalPayments: AdditionalPayment[]
 }

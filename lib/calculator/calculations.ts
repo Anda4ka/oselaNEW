@@ -193,10 +193,13 @@ export function calculateMortgage(input: CalculatorInput, settings: any): Calcul
       monthlyPayment2: 0,
       totalInterest: 0,
       totalPayment: 0,
-      excessArea: 0,
-      excessAreaPercent: 0,
+      excessArea: areaCheck.excessArea,
+      excessAreaPercent: areaCheck.excessPercent,
       excessPrice: 0,
       excessPricePercent: 0,
+      maxAreaExcessPercent: settings.maxAreaExcessPercent,
+      maxBuildingAge: settings.maxBuildingAge,
+      buildingAge: input.buildingAge,
       warnings,
       additionalPayments
     }
@@ -227,10 +230,13 @@ export function calculateMortgage(input: CalculatorInput, settings: any): Calcul
       monthlyPayment2: 0,
       totalInterest: 0,
       totalPayment: 0,
-      excessArea: 0,
-      excessAreaPercent: 0,
-      excessPrice: 0,
-      excessPricePercent: 0,
+      excessArea: areaCheck.excessArea,
+      excessAreaPercent: areaCheck.excessPercent,
+      excessPrice: priceCheck.excessPrice,
+      excessPricePercent: priceCheck.excessPercent,
+      maxAreaExcessPercent: settings.maxAreaExcessPercent,
+      maxBuildingAge: settings.maxBuildingAge,
+      buildingAge: input.buildingAge,
       warnings,
       additionalPayments
     }

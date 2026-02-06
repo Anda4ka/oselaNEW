@@ -11,18 +11,6 @@ export default function CalculatorResults({ result }: CalculatorResultsProps) {
   const t = useTranslations('results')
   const tErrors = useTranslations('errors')
 
-  if (!result.success) {
-    const errorKey = result.error?.replace('errors.', '') || 'invalidInput'
-    return (
-      <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-4xl mx-auto">
-        <h3 className="text-lg font-semibold text-red-800 mb-2">
-          {t('status')}: {t('notAllowed')}
-        </h3>
-        <p className="text-red-700">{tErrors(errorKey)}</p>
-      </div>
-    )
-  }
-
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat('uk-UA', {
       style: 'currency',
@@ -30,6 +18,85 @@ export default function CalculatorResults({ result }: CalculatorResultsProps) {
       minimumFractionDigits: 0,
       maximumFractionDigits: 0
     }).format(value)
+  }
+
+  if (!result.success) {
+    const errorKey = result.error?.replace('errors.', '') || 'invalidInput'
+    const detailKey = `${errorKey}Detail`
+
+    const detailParams: Record<string, string> = {}
+    if (result.normativeArea) detailParams.normArea = result.normativeArea.toFixed(1)
+    if (result.actualArea) detailParams.actualArea = result.actualArea.toFixed(1)
+    if (result.excessArea) detailParams.excessArea = result.excessArea.toFixed(1)
+    if (result.excessAreaPercent) detailParams.excessPercent = result.excessAreaPercent.toFixed(1)
+    if (result.maxAreaExcessPercent !== undefined) detailParams.maxPercent = result.maxAreaExcessPercent.toString()
+    if (result.maxBuildingAge !== undefined) detailParams.maxAge = result.maxBuildingAge.toString()
+    if (result.buildingAge !== undefined) detailParams.actualAge = result.buildingAge.toString()
+    if (result.limitPrice) detailParams.limitPrice = formatCurrency(result.limitPrice)
+    if (result.actualPricePerSqM) detailParams.actualPrice = formatCurrency(result.actualPricePerSqM)
+    if (result.excessPricePercent) detailParams.excessPercent = result.excessPricePercent.toFixed(1)
+
+    const hasDetail = tErrors.has(detailKey)
+
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-4xl mx-auto">
+        <h3 className="text-xl font-semibold text-red-800 mb-3">
+          {t('status')}: {t('notAllowed')}
+        </h3>
+        <div className="mb-4 p-4 bg-red-100 rounded-lg">
+          <p className="text-red-800 font-medium text-lg mb-2">{tErrors(errorKey)}</p>
+          {hasDetail && (
+            <p className="text-red-700 text-sm leading-relaxed">{tErrors(detailKey, detailParams)}</p>
+          )}
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+          {result.normativeArea > 0 && (
+            <div className="border border-red-200 rounded-lg p-3 bg-white">
+              <h4 className="font-semibold text-gray-800 mb-2 text-sm">{t('areaAnalysis')}</h4>
+              <div className="space-y-1 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">{t('normativeArea')}</span>
+                  <span className="font-medium text-gray-800">{result.normativeArea.toFixed(1)} m\u00B2</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">{t('actualArea')}</span>
+                  <span className="font-medium text-gray-800">{result.actualArea.toFixed(1)} m\u00B2</span>
+                </div>
+                {result.excessArea > 0 && (
+                  <div className="flex justify-between text-red-600 font-medium">
+                    <span>{t('excessArea')}</span>
+                    <span>+{result.excessArea.toFixed(1)} m\u00B2 ({result.excessAreaPercent.toFixed(1)}%)</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {result.limitPrice > 0 && (
+            <div className="border border-red-200 rounded-lg p-3 bg-white">
+              <h4 className="font-semibold text-gray-800 mb-2 text-sm">{t('priceAnalysis')}</h4>
+              <div className="space-y-1 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-600">{t('limitPrice')}</span>
+                  <span className="font-medium text-gray-800">{formatCurrency(result.limitPrice)}/m\u00B2</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-600">{t('actualPrice')}</span>
+                  <span className="font-medium text-gray-800">{formatCurrency(result.actualPricePerSqM)}/m\u00B2</span>
+                </div>
+                {result.excessPrice > 0 && (
+                  <div className="flex justify-between text-red-600 font-medium">
+                    <span>{t('excessPrice')}</span>
+                    <span>+{result.excessPricePercent.toFixed(1)}%</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    )
   }
 
   return (
