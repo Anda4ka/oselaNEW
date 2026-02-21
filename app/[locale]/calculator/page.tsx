@@ -7,20 +7,36 @@ import CalculatorForm from '@/components/calculator/CalculatorForm'
 import CalculatorResults from '@/components/calculator/CalculatorResults'
 import type { CalculationResult, CalculatorInput } from '@/lib/calculator/types'
 
-function isInputComplete(input: Partial<CalculatorInput>): boolean {
+// Minimum required fields to get a meaningful calculation
+function hasEnoughInput(input: Partial<CalculatorInput>): boolean {
   return !!(
     input.category &&
-    input.age && input.age >= 18 && input.age <= 70 &&
-    input.familySize && input.familySize >= 1 &&
-    input.propertyType &&
-    input.region &&
-    input.settlementType &&
     input.area && input.area >= 10 &&
     input.totalCost && input.totalCost >= 100000 &&
-    input.buildingAge !== undefined && input.buildingAge !== null && input.buildingAge >= 0 &&
-    input.loanTerm && input.loanTerm >= 1 && input.loanTerm <= 20
+    input.region &&
+    input.settlementType &&
+    input.buildingAge !== undefined &&
+    input.loanTerm && input.loanTerm >= 1
   )
 }
+
+function countFilledFields(input: Partial<CalculatorInput>): number {
+  const checks = [
+    !!input.category,
+    !!(input.age && input.age >= 18),
+    !!(input.familySize && input.familySize >= 1),
+    !!input.propertyType,
+    !!input.region,
+    !!input.settlementType,
+    !!(input.area && input.area >= 10),
+    !!(input.totalCost && input.totalCost >= 100000),
+    input.buildingAge !== undefined && input.buildingAge !== null,
+    !!(input.loanTerm && input.loanTerm >= 1),
+  ]
+  return checks.filter(Boolean).length
+}
+
+const TOTAL_FIELDS = 10
 
 export default function CalculatorPage() {
   const t = useTranslations('calculator')
@@ -51,7 +67,8 @@ export default function CalculatorPage() {
   }
 
   const calculate = useCallback(async (currentInput: Partial<CalculatorInput>) => {
-    if (!isInputComplete(currentInput)) {
+    // Calculate whenever we have enough for a meaningful result (not all fields required)
+    if (!hasEnoughInput(currentInput)) {
       if (abortRef.current) abortRef.current.abort()
       abortRef.current = null
       setLoading(false)
@@ -118,6 +135,59 @@ export default function CalculatorPage() {
   }
 
   const status = getStatus()
+  const filledCount = countFilledFields(input)
+  const progressPercent = Math.round((filledCount / TOTAL_FIELDS) * 100)
+  const hasEnough = hasEnoughInput(input)
+
+  // Empty state — show progress towards getting a result
+  const EmptyState = () => (
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+      <div className="text-center mb-5">
+        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary-50 mb-3">
+          <svg className="w-7 h-7 text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <p className="text-sm font-medium text-gray-700">Заповніть основні поля</p>
+        <p className="text-xs text-gray-400 mt-0.5">для розрахунку потрібні: площа, вартість, місто</p>
+      </div>
+
+      {/* Field progress */}
+      <div className="space-y-2">
+        <div className="flex justify-between text-xs text-gray-500">
+          <span>Прогрес заповнення</span>
+          <span className="font-semibold text-primary-600">{filledCount}/{TOTAL_FIELDS} полів</span>
+        </div>
+        <div className="w-full bg-gray-100 rounded-full h-2">
+          <div
+            className="bg-primary-500 h-2 rounded-full transition-all duration-500"
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
+      </div>
+
+      {/* Field checklist */}
+      <div className="mt-4 space-y-1.5">
+        {[
+          { label: 'Категорія', done: !!input.category },
+          { label: 'Місто / регіон', done: !!input.region && !!input.settlementType },
+          { label: 'Площа житла', done: !!(input.area && input.area >= 10) },
+          { label: 'Вартість (≥ 100 000 ₴)', done: !!(input.totalCost && input.totalCost >= 100000) },
+          { label: 'Рік будівлі', done: input.buildingAge !== undefined },
+        ].map(({ label, done }) => (
+          <div key={label} className="flex items-center gap-2 text-xs">
+            <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 ${done ? 'bg-emerald-100' : 'bg-gray-100'}`}>
+              {done
+                ? <svg className="w-2.5 h-2.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                : <div className="w-1.5 h-1.5 rounded-full bg-gray-300" />
+              }
+            </div>
+            <span className={done ? 'text-gray-500 line-through' : 'text-gray-600'}>{label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  )
 
   return (
     <>
@@ -138,6 +208,7 @@ export default function CalculatorPage() {
               <CalculatorForm input={input} onInputChange={handleInputChange} />
             </div>
 
+            {/* Desktop results panel */}
             <div className="hidden lg:block flex-1 min-w-0">
               <div className="sticky top-6">
                 {errorMessage && !loading && (
@@ -147,7 +218,7 @@ export default function CalculatorPage() {
                 )}
 
                 {loading && (
-                  <div className="flex items-center justify-center py-8">
+                  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-center justify-center py-12">
                     <svg className="animate-spin h-6 w-6 text-primary-500" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
@@ -161,25 +232,21 @@ export default function CalculatorPage() {
                   </div>
                 )}
 
+                {/* Show progress/checklist until we have enough for calculation */}
                 {!result && !loading && !errorMessage && (
-                  <div className="text-center py-12 text-gray-400">
-                    <svg className="mx-auto h-12 w-12 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                    </svg>
-                    <p className="text-sm">{t('fillAllFields')}</p>
-                  </div>
+                  <EmptyState />
                 )}
               </div>
             </div>
           </div>
         </div>
 
+        {/* Mobile bottom sheet — shown when result available */}
         {result && !loading && (
           <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50">
             <div
-              className={`bg-white border-t-2 shadow-2xl transition-all ${
-                status === 'pass' ? 'border-emerald-400' : status === 'warn' ? 'border-amber-400' : 'border-red-400'
-              }`}
+              className={`bg-white border-t-2 shadow-2xl transition-all ${status === 'pass' ? 'border-emerald-400' : status === 'warn' ? 'border-amber-400' : 'border-red-400'
+                }`}
             >
               <button
                 onClick={() => setMobileOpen(!mobileOpen)}
@@ -187,7 +254,7 @@ export default function CalculatorPage() {
               >
                 <div className="flex items-center gap-3">
                   <span className="text-lg">
-                    {status === 'pass' ? '\u2705' : status === 'warn' ? '\u26A0\uFE0F' : '\u274C'}
+                    {status === 'pass' ? '✅' : status === 'warn' ? '⚠️' : '❌'}
                   </span>
                   <div className="text-left">
                     {result.success ? (
@@ -219,6 +286,7 @@ export default function CalculatorPage() {
 
         {result && !loading && <div className="lg:hidden h-20" />}
 
+        {/* Mobile: progress/loading/error below form */}
         <div className="lg:hidden px-4 pb-24">
           {errorMessage && !loading && (
             <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -233,10 +301,8 @@ export default function CalculatorPage() {
               </svg>
             </div>
           )}
-          {!result && !loading && !errorMessage && (
-            <div className="text-center py-8 text-gray-400">
-              <p className="text-sm">{t('fillAllFields')}</p>
-            </div>
+          {!result && !loading && !errorMessage && !hasEnough && (
+            <EmptyState />
           )}
         </div>
       </main>

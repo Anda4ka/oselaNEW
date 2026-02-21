@@ -10,14 +10,15 @@ const intlMiddleware = createMiddleware({
 
 export default function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
-  
+
   if (pathname === '/') {
     return NextResponse.redirect(new URL('/uk', request.url));
   }
-  
+
   return intlMiddleware(request);
 }
 
 export const config = {
-  matcher: ['/((?!api|_next|_vercel|favicon.ico|_next).*)']
+  // Exclude API routes, Next.js internals, and static files (including .json in /public)
+  matcher: ['/((?!api|_next|_vercel|favicon\\.ico|.*\\..+).*)'],
 };

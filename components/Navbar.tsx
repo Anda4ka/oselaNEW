@@ -43,12 +43,6 @@ export default function Navbar() {
             >
               {t('calculator')}
             </Link>
-            <Link
-              href={`/${locale}/admin`}
-              className="hidden sm:inline text-gray-700 hover:text-primary-600 transition"
-            >
-              {t('admin')}
-            </Link>
             <div className="flex items-center space-x-1 border-l pl-4 ml-2">
               {locales.map((loc) => (
                 <button
@@ -87,9 +81,6 @@ export default function Navbar() {
             </Link>
             <Link href={`/${locale}/calculator`} className="block py-2 text-gray-700 hover:text-primary-600" onClick={() => setMenuOpen(false)}>
               {t('calculator')}
-            </Link>
-            <Link href={`/${locale}/admin`} className="block py-2 text-gray-700 hover:text-primary-600" onClick={() => setMenuOpen(false)}>
-              {t('admin')}
             </Link>
           </div>
         )}

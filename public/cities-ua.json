@@ -1,0 +1,725 @@
+[
+    {
+        "name": "Київ",
+        "nameAlt": [
+            "Kyiv",
+            "Kiev"
+        ],
+        "region": "Kyiv",
+        "is_large_city": true
+    },
+    {
+        "name": "Харків",
+        "nameAlt": [
+            "Kharkiv",
+            "Харьков"
+        ],
+        "region": "Kharkiv",
+        "is_large_city": true
+    },
+    {
+        "name": "Одеса",
+        "nameAlt": [
+            "Odessa",
+            "Odesa"
+        ],
+        "region": "Odesa",
+        "is_large_city": true
+    },
+    {
+        "name": "Дніпро",
+        "nameAlt": [
+            "Dnipro",
+            "Днепр",
+            "Дніпропетровськ"
+        ],
+        "region": "Dnipropetrovsk",
+        "is_large_city": true
+    },
+    {
+        "name": "Донецьк",
+        "nameAlt": [
+            "Donetsk"
+        ],
+        "region": "Donetsk",
+        "is_large_city": true
+    },
+    {
+        "name": "Запоріжжя",
+        "nameAlt": [
+            "Zaporizhzhia",
+            "Запорожье"
+        ],
+        "region": "Zaporizhzhia",
+        "is_large_city": true
+    },
+    {
+        "name": "Львів",
+        "nameAlt": [
+            "Lviv",
+            "Lvov"
+        ],
+        "region": "Lviv",
+        "is_large_city": true
+    },
+    {
+        "name": "Кривий Ріг",
+        "nameAlt": [
+            "Kryvyi Rih",
+            "Кривой Рог"
+        ],
+        "region": "Dnipropetrovsk",
+        "is_large_city": true
+    },
+    {
+        "name": "Миколаїв",
+        "nameAlt": [
+            "Mykolaiv",
+            "Николаев"
+        ],
+        "region": "Mykolaiv",
+        "is_large_city": true
+    },
+    {
+        "name": "Маріуполь",
+        "nameAlt": [
+            "Mariupol"
+        ],
+        "region": "Donetsk",
+        "is_large_city": true
+    },
+    {
+        "name": "Луганськ",
+        "nameAlt": [
+            "Luhansk",
+            "Луганск"
+        ],
+        "region": "Luhansk",
+        "is_large_city": true
+    },
+    {
+        "name": "Вінниця",
+        "nameAlt": [
+            "Vinnytsia",
+            "Винница"
+        ],
+        "region": "Vinnytsia",
+        "is_large_city": false
+    },
+    {
+        "name": "Макіївка",
+        "nameAlt": [
+            "Makiivka"
+        ],
+        "region": "Donetsk",
+        "is_large_city": false
+    },
+    {
+        "name": "Херсон",
+        "nameAlt": [
+            "Kherson"
+        ],
+        "region": "Kherson",
+        "is_large_city": false
+    },
+    {
+        "name": "Полтава",
+        "nameAlt": [
+            "Poltava"
+        ],
+        "region": "Poltava",
+        "is_large_city": false
+    },
+    {
+        "name": "Чернігів",
+        "nameAlt": [
+            "Chernihiv",
+            "Чернигов"
+        ],
+        "region": "Chernihiv",
+        "is_large_city": false
+    },
+    {
+        "name": "Черкаси",
+        "nameAlt": [
+            "Cherkasy",
+            "Черкассы"
+        ],
+        "region": "Cherkasy",
+        "is_large_city": false
+    },
+    {
+        "name": "Суми",
+        "nameAlt": [
+            "Sumy"
+        ],
+        "region": "Sumy",
+        "is_large_city": false
+    },
+    {
+        "name": "Житомир",
+        "nameAlt": [
+            "Zhytomyr",
+            "Житомир"
+        ],
+        "region": "Zhytomyr",
+        "is_large_city": false
+    },
+    {
+        "name": "Хмельницький",
+        "nameAlt": [
+            "Khmelnytskyi",
+            "Хмельницкий"
+        ],
+        "region": "Khmelnytskyi",
+        "is_large_city": false
+    },
+    {
+        "name": "Рівне",
+        "nameAlt": [
+            "Rivne",
+            "Ровно"
+        ],
+        "region": "Rivne",
+        "is_large_city": false
+    },
+    {
+        "name": "Івано-Франківськ",
+        "nameAlt": [
+            "Ivano-Frankivsk",
+            "ИваноФранківськ"
+        ],
+        "region": "IvanoFrankivsk",
+        "is_large_city": false
+    },
+    {
+        "name": "Тернопіль",
+        "nameAlt": [
+            "Ternopil",
+            "Тернополь"
+        ],
+        "region": "Ternopil",
+        "is_large_city": false
+    },
+    {
+        "name": "Луцьк",
+        "nameAlt": [
+            "Lutsk",
+            "Луцк"
+        ],
+        "region": "Volyn",
+        "is_large_city": false
+    },
+    {
+        "name": "Ужгород",
+        "nameAlt": [
+            "Uzhhorod",
+            "Ужгород"
+        ],
+        "region": "Zakarpattia",
+        "is_large_city": false
+    },
+    {
+        "name": "Кропивницький",
+        "nameAlt": [
+            "Kropyvnytskyi",
+            "Кировоград",
+            "Кіровоград"
+        ],
+        "region": "Kirovohrad",
+        "is_large_city": false
+    },
+    {
+        "name": "Мукачево",
+        "nameAlt": [
+            "Mukachevo"
+        ],
+        "region": "Zakarpattia",
+        "is_large_city": false
+    },
+    {
+        "name": "Бердянськ",
+        "nameAlt": [
+            "Berdyansk"
+        ],
+        "region": "Zaporizhzhia",
+        "is_large_city": false
+    },
+    {
+        "name": "Мелітополь",
+        "nameAlt": [
+            "Melitopol"
+        ],
+        "region": "Zaporizhzhia",
+        "is_large_city": false
+    },
+    {
+        "name": "Нікополь",
+        "nameAlt": [
+            "Nikopol"
+        ],
+        "region": "Dnipropetrovsk",
+        "is_large_city": false
+    },
+    {
+        "name": "Краматорськ",
+        "nameAlt": [
+            "Kramatorsk"
+        ],
+        "region": "Donetsk",
+        "is_large_city": false
+    },
+    {
+        "name": "Слов'янськ",
+        "nameAlt": [
+            "Sloviansk",
+            "Слов'янськ"
+        ],
+        "region": "Donetsk",
+        "is_large_city": false
+    },
+    {
+        "name": "Маріуполь",
+        "nameAlt": [
+            "Mariupol"
+        ],
+        "region": "Donetsk",
+        "is_large_city": true
+    },
+    {
+        "name": "Горлівка",
+        "nameAlt": [
+            "Horlivka"
+        ],
+        "region": "Donetsk",
+        "is_large_city": false
+    },
+    {
+        "name": "Лисичанськ",
+        "nameAlt": [
+            "Lysychansk"
+        ],
+        "region": "Luhansk",
+        "is_large_city": false
+    },
+    {
+        "name": "Сєвєродонецьк",
+        "nameAlt": [
+            "Sievierodonetsk"
+        ],
+        "region": "Luhansk",
+        "is_large_city": false
+    },
+    {
+        "name": "Бровари",
+        "nameAlt": [
+            "Brovary"
+        ],
+        "region": "KyivRegion",
+        "is_large_city": false
+    },
+    {
+        "name": "Борисполь",
+        "nameAlt": [
+            "Boryspil"
+        ],
+        "region": "KyivRegion",
+        "is_large_city": false
+    },
+    {
+        "name": "Біла Церква",
+        "nameAlt": [
+            "Bila Tserkva",
+            "Белая Церковь"
+        ],
+        "region": "KyivRegion",
+        "is_large_city": false
+    },
+    {
+        "name": "Фастів",
+        "nameAlt": [
+            "Fastiv"
+        ],
+        "region": "KyivRegion",
+        "is_large_city": false
+    },
+    {
+        "name": "Вишневе",
+        "nameAlt": [
+            "Vyshneve"
+        ],
+        "region": "KyivRegion",
+        "is_large_city": false
+    },
+    {
+        "name": "Ірпінь",
+        "nameAlt": [
+            "Irpin"
+        ],
+        "region": "KyivRegion",
+        "is_large_city": false
+    },
+    {
+        "name": "Буча",
+        "nameAlt": [
+            "Bucha"
+        ],
+        "region": "KyivRegion",
+        "is_large_city": false
+    },
+    {
+        "name": "Обухів",
+        "nameAlt": [
+            "Obukhiv"
+        ],
+        "region": "KyivRegion",
+        "is_large_city": false
+    },
+    {
+        "name": "Vasylkiv",
+        "nameAlt": [
+            "Vasylkiv",
+            "Васильків"
+        ],
+        "region": "KyivRegion",
+        "is_large_city": false
+    },
+    {
+        "name": "Переяслав",
+        "nameAlt": [
+            "Pereiaslav"
+        ],
+        "region": "KyivRegion",
+        "is_large_city": false
+    },
+    {
+        "name": "Дрогобич",
+        "nameAlt": [
+            "Drohobych"
+        ],
+        "region": "Lviv",
+        "is_large_city": false
+    },
+    {
+        "name": "Стрий",
+        "nameAlt": [
+            "Stryi"
+        ],
+        "region": "Lviv",
+        "is_large_city": false
+    },
+    {
+        "name": "Трускавець",
+        "nameAlt": [
+            "Truskavets"
+        ],
+        "region": "Lviv",
+        "is_large_city": false
+    },
+    {
+        "name": "Червоноград",
+        "nameAlt": [
+            "Chervonohrad"
+        ],
+        "region": "Lviv",
+        "is_large_city": false
+    },
+    {
+        "name": "Kam'yanets-Podilskyi",
+        "nameAlt": [
+            "Кам'янець-Подільський",
+            "Кам'янець"
+        ],
+        "region": "Khmelnytskyi",
+        "is_large_city": false
+    },
+    {
+        "name": "Шепетівка",
+        "nameAlt": [
+            "Shepetivka"
+        ],
+        "region": "Khmelnytskyi",
+        "is_large_city": false
+    },
+    {
+        "name": "Коростень",
+        "nameAlt": [
+            "Korosten"
+        ],
+        "region": "Zhytomyr",
+        "is_large_city": false
+    },
+    {
+        "name": "Бердичів",
+        "nameAlt": [
+            "Berdychiv"
+        ],
+        "region": "Zhytomyr",
+        "is_large_city": false
+    },
+    {
+        "name": "Конотоп",
+        "nameAlt": [
+            "Konotop"
+        ],
+        "region": "Sumy",
+        "is_large_city": false
+    },
+    {
+        "name": "Шостка",
+        "nameAlt": [
+            "Shostka"
+        ],
+        "region": "Sumy",
+        "is_large_city": false
+    },
+    {
+        "name": "Прилуки",
+        "nameAlt": [
+            "Pryluky"
+        ],
+        "region": "Chernihiv",
+        "is_large_city": false
+    },
+    {
+        "name": "Ніжин",
+        "nameAlt": [
+            "Nizhyn"
+        ],
+        "region": "Chernihiv",
+        "is_large_city": false
+    },
+    {
+        "name": "Умань",
+        "nameAlt": [
+            "Uman"
+        ],
+        "region": "Cherkasy",
+        "is_large_city": false
+    },
+    {
+        "name": "Сміла",
+        "nameAlt": [
+            "Smila"
+        ],
+        "region": "Cherkasy",
+        "is_large_city": false
+    },
+    {
+        "name": "Кременчук",
+        "nameAlt": [
+            "Kremenchuk"
+        ],
+        "region": "Poltava",
+        "is_large_city": false
+    },
+    {
+        "name": "Лубни",
+        "nameAlt": [
+            "Lubny"
+        ],
+        "region": "Poltava",
+        "is_large_city": false
+    },
+    {
+        "name": "Олександрія",
+        "nameAlt": [
+            "Oleksandriia"
+        ],
+        "region": "Kirovohrad",
+        "is_large_city": false
+    },
+    {
+        "name": "Вознесенськ",
+        "nameAlt": [
+            "Voznesensk"
+        ],
+        "region": "Mykolaiv",
+        "is_large_city": false
+    },
+    {
+        "name": "Первомайськ",
+        "nameAlt": [
+            "Pervomaysk"
+        ],
+        "region": "Mykolaiv",
+        "is_large_city": false
+    },
+    {
+        "name": "Ізмаїл",
+        "nameAlt": [
+            "Izmail"
+        ],
+        "region": "Odesa",
+        "is_large_city": false
+    },
+    {
+        "name": "Чорноморськ",
+        "nameAlt": [
+            "Chornomorsk",
+            "Іллічівськ"
+        ],
+        "region": "Odesa",
+        "is_large_city": false
+    },
+    {
+        "name": "Южне",
+        "nameAlt": [
+            "Yuzhne"
+        ],
+        "region": "Odesa",
+        "is_large_city": false
+    },
+    {
+        "name": "Коломия",
+        "nameAlt": [
+            "Kolomyia"
+        ],
+        "region": "IvanoFrankivsk",
+        "is_large_city": false
+    },
+    {
+        "name": "Калуш",
+        "nameAlt": [
+            "Kalush"
+        ],
+        "region": "IvanoFrankivsk",
+        "is_large_city": false
+    },
+    {
+        "name": "Тернопіль",
+        "nameAlt": [
+            "Ternopil"
+        ],
+        "region": "Ternopil",
+        "is_large_city": false
+    },
+    {
+        "name": "Кременець",
+        "nameAlt": [
+            "Kremenets"
+        ],
+        "region": "Ternopil",
+        "is_large_city": false
+    },
+    {
+        "name": "Ковель",
+        "nameAlt": [
+            "Kovel"
+        ],
+        "region": "Volyn",
+        "is_large_city": false
+    },
+    {
+        "name": "Нова Каховка",
+        "nameAlt": [
+            "Nova Kakhovka"
+        ],
+        "region": "Kherson",
+        "is_large_city": false
+    },
+    {
+        "name": "Генічеськ",
+        "nameAlt": [
+            "Henichesk"
+        ],
+        "region": "Kherson",
+        "is_large_city": false
+    },
+    {
+        "name": "Охтирка",
+        "nameAlt": [
+            "Okhtyrka"
+        ],
+        "region": "Sumy",
+        "is_large_city": false
+    },
+    {
+        "name": "Чернівці",
+        "nameAlt": [
+            "Chernivtsi",
+            "Черновцы"
+        ],
+        "region": "Chernivtsi",
+        "is_large_city": false
+    },
+    {
+        "name": "Хотин",
+        "nameAlt": [
+            "Khotyn"
+        ],
+        "region": "Chernivtsi",
+        "is_large_city": false
+    },
+    {
+        "name": "Мороз",
+        "nameAlt": [],
+        "region": "Rivne",
+        "is_large_city": false
+    },
+    {
+        "name": "Сарни",
+        "nameAlt": [
+            "Sarny"
+        ],
+        "region": "Rivne",
+        "is_large_city": false
+    },
+    {
+        "name": "Запоріжжя",
+        "nameAlt": [
+            "Zaporizhzhia"
+        ],
+        "region": "Zaporizhzhia",
+        "is_large_city": true
+    },
+    {
+        "name": "Енергодар",
+        "nameAlt": [
+            "Enerhodar"
+        ],
+        "region": "Zaporizhzhia",
+        "is_large_city": false
+    },
+    {
+        "name": "Павлоград",
+        "nameAlt": [
+            "Pavlohrad"
+        ],
+        "region": "Dnipropetrovsk",
+        "is_large_city": false
+    },
+    {
+        "name": "Кам'янське",
+        "nameAlt": [
+            "Kamianske",
+            "Днепродзержинськ"
+        ],
+        "region": "Dnipropetrovsk",
+        "is_large_city": false
+    },
+    {
+        "name": "Новомосковськ",
+        "nameAlt": [
+            "Novomoskovsk"
+        ],
+        "region": "Dnipropetrovsk",
+        "is_large_city": false
+    },
+    {
+        "name": "Кривий Ріг",
+        "nameAlt": [
+            "Kryvyi Rih"
+        ],
+        "region": "Dnipropetrovsk",
+        "is_large_city": true
+    },
+    {
+        "name": "Трускавець",
+        "nameAlt": [
+            "Truskavets"
+        ],
+        "region": "Lviv",
+        "is_large_city": false
+    }
+]

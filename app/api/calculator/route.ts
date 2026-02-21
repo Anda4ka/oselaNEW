@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/prisma'
 import { calculateMortgage } from '@/lib/calculator/calculations'
 import type { CalculatorInput } from '@/lib/calculator/types'
+import { REGIONAL_PRICES, USER_CATEGORIES, LOAN_SETTINGS, FRONTLINE_REGIONS } from '@/lib/config'
 
 export async function POST(request: NextRequest) {
   try {
@@ -14,43 +14,35 @@ export async function POST(request: NextRequest) {
       )
     }
     
-    const userCategory = await prisma.userCategory.findUnique({
-      where: { code: input.category }
-    })
-    
+    const userCategory = USER_CATEGORIES[input.category]
+
     if (!userCategory) {
       return NextResponse.json(
         { success: false, error: 'Invalid category' },
         { status: 400 }
       )
     }
-    
-    const regionalPrice = await prisma.regionalPrice.findUnique({
-      where: { region: input.region }
-    })
-    
+
+    const regionalPrice = REGIONAL_PRICES[input.region]
+
     if (!regionalPrice) {
       return NextResponse.json(
         { success: false, error: 'Invalid region' },
         { status: 400 }
       )
     }
-    
-    const loanSettings = await prisma.loanSettings.findFirst()
-    
-    if (!loanSettings) {
-      return NextResponse.json(
-        { success: false, error: 'Settings not found' },
-        { status: 500 }
-      )
-    }
-    
+
+    const isFrontlineRegion = FRONTLINE_REGIONS.includes(input.region)
+    const effectiveMaxBuildingAge = isFrontlineRegion
+      ? userCategory.frontlineMaxBuildingAge
+      : userCategory.maxBuildingAge
+
     const settings = {
-      ...loanSettings,
+      ...LOAN_SETTINGS,
       pricePerSqM: regionalPrice.pricePerSqM,
-      maxBuildingAge: userCategory.maxBuildingAge,
+      maxBuildingAge: effectiveMaxBuildingAge,
       ratePeriod1: userCategory.ratePeriod1,
-      ratePeriod2: userCategory.ratePeriod2
+      ratePeriod2: userCategory.ratePeriod2,
     }
     
     const result = calculateMortgage(input, settings)

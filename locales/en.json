@@ -247,7 +247,14 @@
       "scientist": "Scientist",
       "idp": "Internally Displaced Person (IDP)",
       "veteran": "War Veteran",
-      "regular": "Other Citizen without Housing"
+      "regular": "Other Citizen without Housing",
+      "details": {
+        "downPayment20": "Down payment from 20% (10% under 26)",
+        "newBuilding3": "Building up to 3 years old",
+        "newBuilding20frontline": "Up to 20 years in frontline regions",
+        "idpBuilding20": "Building up to 20 years old (all regions)",
+        "loan200to5m": "Loan from 200K to 5M UAH"
+      }
     },
     "features": {
       "title": "Program Benefits",
@@ -290,7 +297,13 @@
     },
     "footer": {
       "rights": "All rights reserved",
-      "official": "Official program site: eoselia.diia.gov.ua"
+      "official": "Official program site: eoselia.diia.gov.ua",
+      "description": "Unofficial calculator for the єОселя state mortgage program. Data current as of February 2026.",
+      "usefulLinks": "Useful links",
+      "ukrfinzhytlo": "Ukrfinzhytlo (program operator)",
+      "resolution856": "CMU Resolution No. 856",
+      "bankPartners": "Partner banks",
+      "disclaimer": "This is an unofficial calculator. To apply for a loan, contact the program's partner banks."
     }
   },
   "nav": {

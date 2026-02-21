@@ -41,7 +41,8 @@ model UserCategory {
   nameEn      String
   ratePeriod1 Float    // 3% або 7%
   ratePeriod2 Float    // 6% або 10%
-  maxBuildingAge       Int  // 3 або 10 років
+  maxBuildingAge       Int  // 3 або 20 років (для звичайних регіонів)
+  frontlineMaxBuildingAge Int @default(3)
   updatedAt   DateTime @updatedAt
   createdAt   DateTime @default(now())
 }
