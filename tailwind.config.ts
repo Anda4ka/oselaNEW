@@ -22,6 +22,21 @@ const config: Config = {
           900: '#0c4a6e',
         },
       },
+      keyframes: {
+        'num-pop': {
+          '0%': { opacity: '0.3', transform: 'translateY(-7px) scale(0.97)' },
+          '65%': { opacity: '1', transform: 'translateY(1px)  scale(1)' },
+          '100%': { opacity: '1', transform: 'translateY(0)    scale(1)' },
+        },
+        'fade-slide-in': {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        'num-pop': 'num-pop 0.25s ease-out',
+        'fade-slide-in': 'fade-slide-in 0.3s ease-out',
+      },
     },
   },
   plugins: [],

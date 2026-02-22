@@ -67,3 +67,53 @@
 ## Залишається (TBD)
 - [ ] Перевірити ставку 6% для ветеранів у Харківській обл. (потребує уточнення в постанові КМУ №856)
 - [ ] Після наступного наказу Мінрегіону (01.10.2025 або 01.01.2026) — оновити ціни знову
+
+---
+
+## UX-критика (2026-02-22) — нові задачі
+
+### Що вже виправлено (по код-ревью — НЕ потребує задач):
+- ✅ Hero кнопки: "Розрахувати іпотеку" — filled, "Дізнатися більше" — outline (вже правильно в page.tsx)
+- ✅ Переваги програми: іконки вже є (SVG у features array в page.tsx)
+
+### task-007.md — Баги та стильові правки — PASS ✅
+**Виконано:**
+1. ✅ Баг m²: всі 5 місць в CalculatorResults.tsx виправлено (реальний Unicode U+00B2)
+2. ✅ Spinner buildingAge: CSS-класи `[appearance:textfield] [&::-webkit-*-spin-button]:appearance-none` додано
+3. ✅ Age hint: `text-sm text-primary-700 font-medium bg-primary-50` → `text-xs text-amber-700 bg-amber-50`
+4. ✅ Sticky panel: `max-h-[calc(100vh-3rem)] overflow-y-auto` додано
+
+### task-008.md — URL sharing — PASS ✅
+**Виконано:**
+- ✅ `useSearchParams/usePathname/useRouter` імпортовано
+- ✅ Початковий стан форми читається з URL params (всі 10 полів + cityName)
+- ✅ `handleInputChange` синхронізує URL через `router.replace(..., { scroll: false })`
+- ✅ `handleShare` з clipboard API + fallback
+- ✅ Кнопка "Поділитися результатом" у десктоп-панелі
+- ✅ Кнопка "Поділитися" у мобільному bottom sheet
+- **Зауваження (не блокер):** variable shadow `const input` у catch-блоку handleShare
+
+### task-009.md — Анімації + рекомендований дохід — PASS ✅
+**Виконано:**
+- ✅ `globals.css`: `@keyframes num-pop` (drop + bounce) та `@keyframes fade-slide-in` додано
+- ✅ `tailwind.config.ts`: `keyframes` + `animation` (`num-pop 0.25s ease-out`, `fade-slide-in 0.3s ease-out`) в `extend`
+- ✅ `CalculatorResults.tsx`: `animate-num-pop` + `key={result.monthlyPayment1}` на payment divs (re-triggers animation on value change)
+- ✅ `CalculatorResults.tsx`: `animate-fade-slide-in` + `key={res-...}` на outer results div
+- ✅ `CalculatorResults.tsx`: рядок «Рекомендований дохід ≥ X/міс» (formula: `Math.ceil(monthlyPayment1 / 0.4 / 1000) * 1000`)
+
+### task-010.md — Форма: автоколапс + quick-fill пресети — PASS ✅
+**Виконано:**
+- ✅ `AccordionSection`: нові пропси `isComplete?: boolean`, `summary?: React.ReactNode`
+- ✅ `useEffect([isComplete])` → `setOpen(false)` при завершенні секції
+- ✅ Зелений заголовок (`bg-emerald-50`) + SVG checkmark коли `isComplete && !open`
+- ✅ `Chip` компонент + рядок чіпів під заголовком закритої секції
+- ✅ 4 умови completeness: `isCategoryComplete`, `isFamilyComplete`, `isPropertyComplete`, `isLoanComplete`
+- ✅ 3 кнопки quick-fill (🪖 Військовий Київ 60м², 🏥 Медик Харків 45м², 🚶 ВПО Львів 50м²)
+- **Зауваження (не блокер):** `isCategoryComplete` завжди `true` при старті (military — default) → brief flash при першому рендері. Фікс: `useState(!isComplete && defaultOpen)` замість `useState(defaultOpen)`
+
+### task-011.md — Таблиця + timeline + PDF — PASS ✅
+**Виконано:**
+- ✅ `PaymentTimeline` компонент: CSS-бар двох періодів, коректно обробляє `loanTermYears <= 10` (один блок 100%)
+- ✅ Заголовки таблиці: кольорові бейджі (🟢 emerald ≤4%, 🔵 blue >4%) + «після 10р: X%» підписом
+- ✅ Кнопка «Завантажити / Надрукувати» з `window.print()` + `print:hidden`
+- ✅ `globals.css`: `@media print` стилі (ховає навбар, форму; full-width для results; page margins)

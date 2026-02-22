@@ -1,3 +1,50 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes num-pop {
+  0%   { opacity: 0.3; transform: translateY(-7px) scale(0.97); }
+  65%  { opacity: 1;   transform: translateY(1px)  scale(1.00); }
+  100% { opacity: 1;   transform: translateY(0)    scale(1);    }
+}
+
+@keyframes fade-slide-in {
+  0%   { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0);    }
+}
+
+@media print {
+  /* Hide everything except the results panel */
+  .print\:hidden { display: none !important; }
+
+  /* Show only the results card */
+  nav,
+  header,
+  [class*="Navbar"],
+  [class*="CalculatorForm"],
+  .lg\:w-\[420px\],
+  .fixed {
+    display: none !important;
+  }
+
+  /* Remove shadows and borders for clean print */
+  .shadow-lg,
+  .shadow-sm,
+  .shadow-2xl {
+    box-shadow: none !important;
+  }
+
+  /* Ensure full width for results */
+  .flex-1 {
+    width: 100% !important;
+  }
+
+  /* Page margins */
+  @page {
+    margin: 20mm 15mm;
+  }
+
+  body {
+    font-size: 12pt;
+  }
+}

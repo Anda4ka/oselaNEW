@@ -4,6 +4,74 @@ import { useState } from 'react'
 import { useTranslations } from 'next-intl'
 import type { CalculationResult, ComparisonScenario } from '@/lib/calculator/types'
 
+function PaymentTimeline({
+  monthlyPayment1,
+  monthlyPayment2,
+  loanTermYears,
+  rate1Percent,
+  rate2Percent,
+  formatCurrency,
+}: {
+  monthlyPayment1: number
+  monthlyPayment2: number
+  loanTermYears: number
+  rate1Percent: string
+  rate2Percent: string
+  formatCurrency: (v: number) => string
+}) {
+  const hasSecondPeriod = loanTermYears > 10
+  const firstPeriodYears = hasSecondPeriod ? 10 : loanTermYears
+  const firstWidthPercent = hasSecondPeriod
+    ? Math.round((10 / loanTermYears) * 100)
+    : 100
+
+  return (
+    <div className="rounded-xl border border-gray-100 overflow-hidden">
+      {/* Period blocks */}
+      <div className="flex">
+        <div
+          className="bg-primary-50 px-3 py-3 border-r border-primary-100"
+          style={{ width: `${firstWidthPercent}%` }}
+        >
+          <div className="text-[10px] text-primary-500 font-semibold uppercase tracking-wide mb-0.5">
+            {hasSecondPeriod ? `Перші ${firstPeriodYears} р. · ${rate1Percent}%` : `${firstPeriodYears} р. · ${rate1Percent}%`}
+          </div>
+          <div className="text-sm font-bold text-primary-800">{formatCurrency(monthlyPayment1)}<span className="text-xs font-normal text-primary-400">/міс</span></div>
+        </div>
+        {hasSecondPeriod && (
+          <div className="flex-1 bg-gray-50 px-3 py-3">
+            <div className="text-[10px] text-gray-500 font-semibold uppercase tracking-wide mb-0.5">
+              Після 10 р. · {rate2Percent}%
+            </div>
+            <div className="text-sm font-bold text-gray-700">{formatCurrency(monthlyPayment2)}<span className="text-xs font-normal text-gray-400">/міс</span></div>
+          </div>
+        )}
+      </div>
+      {/* Timeline bar */}
+      <div className="relative h-5 bg-gray-100 flex">
+        <div
+          className="bg-primary-400 flex items-center justify-start pl-1.5"
+          style={{ width: `${firstWidthPercent}%` }}
+        >
+          <span className="text-[9px] text-white font-medium whitespace-nowrap">0 р.</span>
+        </div>
+        {hasSecondPeriod && (
+          <div className="flex-1 bg-gray-300 flex items-center justify-end pr-1.5">
+            <span className="text-[9px] text-gray-600 font-medium">{loanTermYears} р.</span>
+          </div>
+        )}
+        {hasSecondPeriod && (
+          <div className="absolute top-0 bottom-0 flex items-center" style={{ left: `${firstWidthPercent}%`, transform: 'translateX(-50%)' }}>
+            <div className="bg-white border border-gray-300 rounded-full px-1 text-[9px] text-gray-500 font-semibold whitespace-nowrap z-10">
+              10 р.
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 interface CalculatorResultsProps {
   result: CalculationResult
   loanTermYears: number
@@ -180,7 +248,7 @@ export default function CalculatorResults({ result, loanTermYears }: CalculatorR
     : 20
 
   return (
-    <div className="space-y-5">
+    <div key={`res-${result.monthlyPayment1}-${result.loanAmount}`} className="space-y-5 animate-fade-slide-in">
       <div className="flex items-center justify-between">
         <StatusBadge status={status} t={t} />
       </div>
@@ -191,7 +259,11 @@ export default function CalculatorResults({ result, loanTermYears }: CalculatorR
             ? t('monthlyPaymentFirst10', { rate: rate1Percent })
             : t('fullTermSingleRate', { rate: rate1Percent })}
         </div>
-        <div className="text-3xl font-bold text-primary-800" style={{ fontVariantNumeric: 'tabular-nums' }}>
+        <div
+          key={result.monthlyPayment1}
+          className="text-3xl font-bold text-primary-800 animate-num-pop"
+          style={{ fontVariantNumeric: 'tabular-nums' }}
+        >
           {formatCurrency(result.monthlyPayment1)}
         </div>
         {hasSecondPeriod && result.monthlyPayment2 > 0 && (
@@ -199,15 +271,34 @@ export default function CalculatorResults({ result, loanTermYears }: CalculatorR
             <div className="text-sm text-gray-600 mt-3">
               {t('monthlyPaymentAfter10', { rate: rate2Percent })}
             </div>
-            <div className="text-2xl font-bold text-primary-700" style={{ fontVariantNumeric: 'tabular-nums' }}>
+            <div
+              key={result.monthlyPayment2}
+              className="text-2xl font-bold text-primary-700 animate-num-pop"
+              style={{ fontVariantNumeric: 'tabular-nums' }}
+            >
               {formatCurrency(result.monthlyPayment2)}
             </div>
           </>
         )}
+        <div className="mt-3 pt-3 border-t border-primary-100 flex items-center justify-between">
+          <span className="text-xs text-gray-500">Рекомендований дохід</span>
+          <span className="text-xs font-semibold text-gray-700">
+            ≥ {formatCurrency(Math.ceil(result.monthlyPayment1 / 0.4 / 1000) * 1000)}/міс
+          </span>
+        </div>
         {hasSecondPeriod && (
           <p className="text-xs text-gray-500 mt-2 leading-relaxed">{t('paymentHint')}</p>
         )}
       </div>
+
+      <PaymentTimeline
+        monthlyPayment1={result.monthlyPayment1}
+        monthlyPayment2={result.monthlyPayment2}
+        loanTermYears={loanTermYears}
+        rate1Percent={rate1Percent}
+        rate2Percent={rate2Percent}
+        formatCurrency={formatCurrency}
+      />
 
       {status === 'warn' && result.additionalPayments.length > 0 && (
         <div className="space-y-2">
@@ -287,16 +378,16 @@ export default function CalculatorResults({ result, loanTermYears }: CalculatorR
               <div className="text-xs font-semibold text-gray-500 uppercase">{t('areaAnalysis')}</div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">{t('normativeArea')}</span>
-                <span>{result.normativeArea.toFixed(1)} m\u00B2</span>
+                <span>{result.normativeArea.toFixed(1)} m²</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">{t('actualArea')}</span>
-                <span>{result.actualArea.toFixed(1)} m\u00B2</span>
+                <span>{result.actualArea.toFixed(1)} m²</span>
               </div>
               {result.excessArea > 0 && (
                 <div className="flex justify-between text-sm text-amber-600">
                   <span>{t('excessArea')}</span>
-                  <span>+{result.excessArea.toFixed(1)} m\u00B2 ({result.excessAreaPercent.toFixed(1)}%)</span>
+                  <span>+{result.excessArea.toFixed(1)} m² ({result.excessAreaPercent.toFixed(1)}%)</span>
                 </div>
               )}
             </div>
@@ -307,11 +398,11 @@ export default function CalculatorResults({ result, loanTermYears }: CalculatorR
               <div className="text-xs font-semibold text-gray-500 uppercase">{t('priceAnalysis')}</div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">{t('limitPrice')}</span>
-                <span>{formatCurrency(result.limitPrice)}/m\u00B2</span>
+                <span>{formatCurrency(result.limitPrice)}/m²</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-600">{t('actualPrice')}</span>
-                <span>{formatCurrency(result.actualPricePerSqM)}/m\u00B2</span>
+                <span>{formatCurrency(result.actualPricePerSqM)}/m²</span>
               </div>
               {result.excessPrice > 0 && (
                 <div className="flex justify-between text-sm text-amber-600">
@@ -366,9 +457,20 @@ export default function CalculatorResults({ result, loanTermYears }: CalculatorR
                     {allSorted.map((s, i) => {
                       const isBaseCol = s.downPaymentPercent === baseDp && Math.abs(s.interestRate1 - baseRate) < 0.001
                       return (
-                        <th key={i} className={`px-4 py-2 text-center text-xs font-semibold min-w-[130px] ${isBaseCol ? 'bg-primary-100 text-primary-800' : 'bg-gray-50 text-gray-600'} ${i === 1 ? 'border-r border-gray-100' : ''}`}>
-                          {t('rate')} {(s.interestRate1 * 100).toFixed(0)}%
-                          <span className="font-normal text-gray-400"> / {t('after10y')} {(s.interestRate2 * 100).toFixed(0)}%</span>
+                        <th key={i} className={`px-4 py-2 text-center min-w-[130px] ${isBaseCol ? 'bg-primary-100' : 'bg-gray-50'} ${i === 1 ? 'border-r border-gray-100' : ''}`}>
+                          <div className="flex flex-col items-center gap-1">
+                            <span className={`inline-flex items-center gap-1 text-xs font-bold px-2 py-0.5 rounded-full ${
+                              s.interestRate1 <= 0.04
+                                ? 'bg-emerald-100 text-emerald-700'
+                                : 'bg-blue-100 text-blue-700'
+                            }`}>
+                              <span className={`w-1.5 h-1.5 rounded-full ${s.interestRate1 <= 0.04 ? 'bg-emerald-500' : 'bg-blue-500'}`} />
+                              {(s.interestRate1 * 100).toFixed(0)}%
+                            </span>
+                            <span className="text-[10px] text-gray-400 font-normal">
+                              після 10р: {(s.interestRate2 * 100).toFixed(0)}%
+                            </span>
+                          </div>
                         </th>
                       )
                     })}
@@ -439,6 +541,18 @@ export default function CalculatorResults({ result, loanTermYears }: CalculatorR
           )}
         </div>
       )}
+
+      <div className="pt-2 print:hidden">
+        <button
+          onClick={() => window.print()}
+          className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-500 hover:bg-gray-50 hover:border-gray-300 transition-colors"
+        >
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6.72 13.829c-.24.03-.48.062-.72.096m.72-.096a42.415 42.415 0 0110.56 0m-10.56 0L6.34 18m10.94-4.171c.24.03.48.062.72.096m-.72-.096L17.66 18m0 0l.229 2.523a1.125 1.125 0 01-1.12 1.227H7.231c-.662 0-1.18-.568-1.12-1.227L6.34 18m11.318 0h1.091A2.25 2.25 0 0021 15.75V9.456c0-1.081-.768-2.015-1.837-2.175a48.055 48.055 0 00-1.913-.247M6.34 18H5.25A2.25 2.25 0 013 15.75V9.456c0-1.081.768-2.015 1.837-2.175a48.056 48.056 0 011.913-.247m10.5 0a48.536 48.536 0 00-10.5 0m10.5 0V3.375c0-.621-.504-1.125-1.125-1.125h-8.25c-.621 0-1.125.504-1.125 1.125v3.659M18 10.5h.008v.008H18V10.5zm-3 0h.008v.008H15V10.5z" />
+          </svg>
+          Завантажити / Надрукувати
+        </button>
+      </div>
     </div>
   )
 }

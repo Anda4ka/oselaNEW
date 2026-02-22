@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import Navbar from '@/components/Navbar'
 import CalculatorForm from '@/components/calculator/CalculatorForm'
@@ -42,18 +43,43 @@ export default function CalculatorPage() {
   const t = useTranslations('calculator')
   const tResults = useTranslations('results')
   const tCommon = useTranslations('common')
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const router = useRouter()
 
-  const [input, setInput] = useState<Partial<CalculatorInput>>({
-    category: 'military',
-    propertyType: 'apartment',
-    region: 'Kyiv',
-    settlementType: 'major',
-    loanTerm: 20,
+  const [input, setInput] = useState<Partial<CalculatorInput>>(() => {
+    const category = searchParams.get('category') || 'military'
+    const propertyType = searchParams.get('propertyType') || 'apartment'
+    const region = searchParams.get('region') || 'Kyiv'
+    const settlementType = searchParams.get('settlementType') || 'major'
+    const loanTerm = searchParams.get('loanTerm') ? parseInt(searchParams.get('loanTerm')!) : 20
+    const age = searchParams.get('age') ? parseInt(searchParams.get('age')!) : undefined
+    const familySize = searchParams.get('familySize') ? parseInt(searchParams.get('familySize')!) : undefined
+    const area = searchParams.get('area') ? parseFloat(searchParams.get('area')!) : undefined
+    const totalCost = searchParams.get('totalCost') ? parseInt(searchParams.get('totalCost')!) : undefined
+    const buildingAgeStr = searchParams.get('buildingAge')
+    const buildingAge = buildingAgeStr !== null ? parseInt(buildingAgeStr) : undefined
+    const cityName = searchParams.get('cityName') || undefined
+
+    return {
+      category,
+      propertyType: propertyType as 'apartment' | 'house',
+      region,
+      settlementType: settlementType as 'major' | 'other',
+      loanTerm,
+      ...(age !== undefined && { age }),
+      ...(familySize !== undefined && { familySize }),
+      ...(area !== undefined && { area }),
+      ...(totalCost !== undefined && { totalCost }),
+      ...(buildingAge !== undefined && { buildingAge }),
+      ...(cityName && { cityName }),
+    }
   })
   const [result, setResult] = useState<CalculationResult | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [copied, setCopied] = useState(false)
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
   const abortRef = useRef<AbortController | null>(null)
 
@@ -125,6 +151,44 @@ export default function CalculatorPage() {
 
   const handleInputChange = (newInput: Partial<CalculatorInput>) => {
     setInput(newInput)
+
+    // Sync to URL params
+    const params = new URLSearchParams()
+    if (newInput.category) params.set('category', newInput.category)
+    if (newInput.propertyType) params.set('propertyType', newInput.propertyType)
+    if (newInput.region) params.set('region', newInput.region)
+    if (newInput.settlementType) params.set('settlementType', newInput.settlementType)
+    if (newInput.loanTerm) params.set('loanTerm', String(newInput.loanTerm))
+    if (newInput.age) params.set('age', String(newInput.age))
+    if (newInput.familySize) params.set('familySize', String(newInput.familySize))
+    if (newInput.area) params.set('area', String(newInput.area))
+    if (newInput.totalCost) params.set('totalCost', String(newInput.totalCost))
+    if (newInput.buildingAge !== undefined && newInput.buildingAge !== null) {
+      params.set('buildingAge', String(newInput.buildingAge))
+    }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const cityName = (newInput as any).cityName
+    if (cityName) params.set('cityName', cityName)
+
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+  }
+
+  const handleShare = () => {
+    navigator.clipboard.writeText(window.location.href).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2500)
+    }).catch(() => {
+      // Fallback: select the URL manually
+      const url = window.location.href
+      const input = document.createElement('input')
+      input.value = url
+      document.body.appendChild(input)
+      input.select()
+      document.execCommand('copy')
+      document.body.removeChild(input)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2500)
+    })
   }
 
   const getStatus = () => {
@@ -210,7 +274,7 @@ export default function CalculatorPage() {
 
             {/* Desktop results panel */}
             <div className="hidden lg:block flex-1 min-w-0">
-              <div className="sticky top-6">
+              <div className="sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto">
                 {errorMessage && !loading && (
                   <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
                     {errorMessage}
@@ -229,6 +293,28 @@ export default function CalculatorPage() {
                 {result && !loading && (
                   <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
                     <CalculatorResults result={result} loanTermYears={input.loanTerm || 20} />
+                    <div className="mt-4 pt-4 border-t border-gray-100">
+                      <button
+                        onClick={handleShare}
+                        className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition-colors"
+                      >
+                        {copied ? (
+                          <>
+                            <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span className="text-emerald-600 font-medium">Посилання скопійовано!</span>
+                          </>
+                        ) : (
+                          <>
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+                            </svg>
+                            <span>Поділитися результатом</span>
+                          </>
+                        )}
+                      </button>
+                    </div>
                   </div>
                 )}
 
@@ -278,6 +364,28 @@ export default function CalculatorPage() {
               {mobileOpen && (
                 <div className="max-h-[70vh] overflow-y-auto px-5 pb-6 border-t border-gray-100">
                   <CalculatorResults result={result} loanTermYears={input.loanTerm || 20} />
+                  <div className="mt-4 pt-4 border-t border-gray-100">
+                    <button
+                      onClick={handleShare}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-600 hover:bg-gray-50 transition-colors"
+                    >
+                      {copied ? (
+                        <>
+                          <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                          <span className="text-emerald-600 font-medium">Скопійовано!</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+                          </svg>
+                          <span>Поділитися</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

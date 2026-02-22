@@ -8,7 +8,8 @@
       "WebFetch(domain:ukrfinzhytlo.in.ua)",
       "WebFetch(domain:privatbank.ua)",
       "WebFetch(domain:mindev.gov.ua)",
-      "WebFetch(domain:online.budstandart.com)"
+      "WebFetch(domain:online.budstandart.com)",
+      "Bash(ls:*)"
     ]
   }
 }
