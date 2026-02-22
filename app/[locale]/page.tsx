@@ -162,9 +162,9 @@ export default function HomePage() {
             </a>
           </div>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 text-sm text-white/90">20+ банків</div>
-            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 text-sm text-white/90">до 5 млн грн</div>
-            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 text-sm text-white/90">до 20 років</div>
+            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 text-sm text-white/90">{t('hero.badge1')}</div>
+            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 text-sm text-white/90">{t('hero.badge2')}</div>
+            <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-1.5 text-sm text-white/90">{t('hero.badge3')}</div>
           </div>
         </div>
       </section>
@@ -176,8 +176,8 @@ export default function HomePage() {
             <div className="mb-10">
               <div className="flex flex-wrap items-center gap-3 mb-6">
                 <span className="text-2xl font-bold text-emerald-600">3%</span>
-                <span className="text-gray-500 text-sm">річних • перші 10 років</span>
-                <span className="ml-auto text-xs text-gray-400">6% після 10 років</span>
+                <span className="text-gray-500 text-sm">{t('categories.rateSubtitle')}</span>
+                <span className="ml-auto text-xs text-gray-400">{t('categories.rateAfter3')}</span>
               </div>
               <div className="flex flex-wrap justify-center gap-4 items-start">
                 {threePercentCategories.map((cat) => (
@@ -224,8 +224,8 @@ export default function HomePage() {
             <div>
               <div className="flex flex-wrap items-center gap-3 mb-6">
                 <span className="text-2xl font-bold text-blue-600">7%</span>
-                <span className="text-gray-500 text-sm">річних • перші 10 років</span>
-                <span className="ml-auto text-xs text-gray-400">10% після 10 років</span>
+                <span className="text-gray-500 text-sm">{t('categories.rateSubtitle')}</span>
+                <span className="ml-auto text-xs text-gray-400">{t('categories.rateAfter7')}</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
                 {sevenPercentCategories.map((cat) => (
@@ -316,7 +316,7 @@ export default function HomePage() {
                         rel="noopener noreferrer"
                         className="mt-4 inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white rounded-xl font-semibold text-sm hover:bg-primary-700 transition shadow-md"
                       >
-                        Подати заявку в Дії
+                        {t('howItWorks.step3.submitBtn')}
                         <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                         </svg>

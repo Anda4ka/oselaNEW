@@ -9,6 +9,7 @@ export interface CalculatorInput {
   totalCost: number
   buildingAge: number
   loanTerm: number
+  cityName?: string
 }
 
 export interface CalculationResult {

@@ -32,6 +32,39 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Validate numeric fields
+    const area = Number(input.area)
+    const totalCost = Number(input.totalCost)
+    const buildingAge = Number(input.buildingAge)
+    const loanTerm = Number(input.loanTerm)
+    const age = Number(input.age)
+    const familySize = Number(input.familySize)
+
+    if (
+      isNaN(area) || area <= 0 ||
+      isNaN(totalCost) || totalCost < 100000 ||
+      isNaN(buildingAge) || buildingAge < 0 ||
+      isNaN(loanTerm) || loanTerm < 1 || loanTerm > 20 ||
+      isNaN(age) || age < 18 || age > 100 ||
+      isNaN(familySize) || familySize < 1 || familySize > 20
+    ) {
+      return NextResponse.json(
+        { success: false, error: 'errors.invalidInput' },
+        { status: 400 }
+      )
+    }
+
+    // Replace input fields with sanitized values
+    const sanitizedInput: CalculatorInput = {
+      ...input,
+      area,
+      totalCost,
+      buildingAge,
+      loanTerm,
+      age,
+      familySize,
+    }
+
     const isFrontlineRegion = FRONTLINE_REGIONS.includes(input.region)
     const effectiveMaxBuildingAge = isFrontlineRegion
       ? userCategory.frontlineMaxBuildingAge
@@ -45,7 +78,7 @@ export async function POST(request: NextRequest) {
       ratePeriod2: userCategory.ratePeriod2,
     }
     
-    const result = calculateMortgage(input, settings)
+    const result = calculateMortgage(sanitizedInput, settings)
     
     return NextResponse.json(result)
   } catch (error) {

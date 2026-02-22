@@ -49,7 +49,15 @@
       "scientist": "Scientist (Public)",
       "idp": "Internally Displaced Person (IDP)",
       "veteran": "War Veteran",
-      "regular": "Other Citizen without Housing"
+      "regular": "Other Citizen without Housing",
+      "militaryShort": "Military",
+      "securityShort": "Police/SBU",
+      "medicShort": "Medic",
+      "teacherShort": "Teacher",
+      "scientistShort": "Scientist",
+      "idpShort": "IDP",
+      "veteranShort": "Veteran",
+      "regularShort": "General"
     },
     "family": {
       "age": "Your Age",
@@ -69,7 +77,11 @@
       "area": "Total Area",
       "totalCost": "Total Property Cost",
       "buildingAge": "Building Age",
-      "buildingAgeHint": "For most categories - up to 3 years, for IDP - up to 10 years"
+      "buildingAgeHint": "For most categories - up to 3 years, for IDP - up to 10 years",
+      "regionPlaceholder": "E.g.: Kyiv, Dnipro, Kharkiv...",
+      "areaPlaceholder": "e.g. 60",
+      "totalCostPlaceholder": "e.g. 2,500,000",
+      "totalCostHint": "Enter amount in digits — will be formatted automatically"
     },
     "loan": {
       "loanTerm": "Loan Term",
@@ -77,6 +89,23 @@
     },
     "fillAllFields": "Fill all fields to calculate",
     "calculationError": "Failed to calculate. Check your connection and try again.",
+    "emptyState": {
+      "title": "Fill in the main fields",
+      "subtitle": "required for calculation: area, cost, city",
+      "progress": "Fill progress",
+      "fields": "fields",
+      "checkCategory": "Category",
+      "checkCity": "City / region",
+      "checkArea": "Housing area",
+      "checkPrice": "Cost (≥ 100,000 UAH)",
+      "checkAge": "Building age"
+    },
+    "quickStart": "Quick start:",
+    "presetMilitary": "🪖 Military · Kyiv · 60m²",
+    "presetMedic": "🏥 Medic · Kharkiv · 45m²",
+    "presetIdp": "🚶 IDP · Lviv · 50m²",
+    "linkCopied": "Link copied!",
+    "retry": "Try again",
     "regions": {
       "Kyiv": "Kyiv",
       "Vinnytsia": "Vinnytsia",
@@ -161,6 +190,7 @@
     "bestTotal": "Best overall",
     "deltaVsBase": "Difference",
     "baseScenario": "Base",
+    "printBtn": "Print",
     "whyThisResult": "Why this result",
     "whyRate": "Rate: {rate1}% → {rate2}%",
     "whyTerm": "Term: {years} years",
@@ -236,7 +266,10 @@
       "title": "State Mortgage Program \"єОселя\"",
       "subtitle": "Affordable housing for Ukrainians at low interest - from 3% per annum",
       "calculateBtn": "Calculate Mortgage",
-      "learnMore": "Learn More"
+      "learnMore": "Learn More",
+      "badge1": "20+ banks",
+      "badge2": "up to 5M UAH",
+      "badge3": "up to 20 years"
     },
     "categories": {
       "title": "Participant Categories and Rates",
@@ -248,6 +281,9 @@
       "idp": "Internally Displaced Person (IDP)",
       "veteran": "War Veteran",
       "regular": "Other Citizen without Housing",
+      "rateSubtitle": "per annum • first 10 years",
+      "rateAfter3": "6% after 10 years",
+      "rateAfter7": "10% after 10 years",
       "details": {
         "downPayment20": "Down payment from 20% (10% under 26)",
         "newBuilding3": "Building up to 3 years old",
@@ -287,7 +323,8 @@
       },
       "step3": {
         "title": "Submit Application",
-        "description": "Submit application via \"Diia\" app and get bank decision"
+        "description": "Submit application via \"Diia\" app and get bank decision",
+        "submitBtn": "Submit Application via Diia"
       }
     },
     "cta": {

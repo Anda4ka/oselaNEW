@@ -4,9 +4,11 @@ import { useState, useEffect, useRef, useCallback, Suspense } from 'react'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import Navbar from '@/components/Navbar'
+import ErrorBoundary from '@/components/ErrorBoundary'
 import CalculatorForm from '@/components/calculator/CalculatorForm'
 import CalculatorResults from '@/components/calculator/CalculatorResults'
 import type { CalculationResult, CalculatorInput } from '@/lib/calculator/types'
+import { formatCurrency } from '@/lib/utils'
 
 // Minimum required fields to get a meaningful calculation
 function hasEnoughInput(input: Partial<CalculatorInput>): boolean {
@@ -82,15 +84,6 @@ function CalculatorPageInner() {
   const [copied, setCopied] = useState(false)
   const debounceRef = useRef<NodeJS.Timeout | null>(null)
   const abortRef = useRef<AbortController | null>(null)
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('uk-UA', {
-      style: 'currency',
-      currency: 'UAH',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0
-    }).format(value)
-  }
 
   const calculate = useCallback(async (currentInput: Partial<CalculatorInput>) => {
     // Calculate whenever we have enough for a meaningful result (not all fields required)
@@ -176,7 +169,7 @@ function CalculatorPageInner() {
   const handleShare = () => {
     navigator.clipboard.writeText(window.location.href).then(() => {
       setCopied(true)
-      setTimeout(() => setCopied(false), 2500)
+      setTimeout(() => setCopied(false), 3000)
     }).catch(() => {
       // Fallback: select the URL manually
       const url = window.location.href
@@ -187,7 +180,7 @@ function CalculatorPageInner() {
       document.execCommand('copy')
       document.body.removeChild(input)
       setCopied(true)
-      setTimeout(() => setCopied(false), 2500)
+      setTimeout(() => setCopied(false), 3000)
     })
   }
 
@@ -212,15 +205,15 @@ function CalculatorPageInner() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
           </svg>
         </div>
-        <p className="text-sm font-medium text-gray-700">Заповніть основні поля</p>
-        <p className="text-xs text-gray-400 mt-0.5">для розрахунку потрібні: площа, вартість, місто</p>
+        <p className="text-sm font-medium text-gray-700">{t('emptyState.title')}</p>
+        <p className="text-xs text-gray-400 mt-0.5">{t('emptyState.subtitle')}</p>
       </div>
 
       {/* Field progress */}
       <div className="space-y-2">
         <div className="flex justify-between text-xs text-gray-500">
-          <span>Прогрес заповнення</span>
-          <span className="font-semibold text-primary-600">{filledCount}/{TOTAL_FIELDS} полів</span>
+          <span>{t('emptyState.progress')}</span>
+          <span className="font-semibold text-primary-600">{filledCount}/{TOTAL_FIELDS} {t('emptyState.fields')}</span>
         </div>
         <div className="w-full bg-gray-100 rounded-full h-2">
           <div
@@ -233,11 +226,11 @@ function CalculatorPageInner() {
       {/* Field checklist */}
       <div className="mt-4 space-y-1.5">
         {[
-          { label: 'Категорія', done: !!input.category },
-          { label: 'Місто / регіон', done: !!input.region && !!input.settlementType },
-          { label: 'Площа житла', done: !!(input.area && input.area >= 10) },
-          { label: 'Вартість (≥ 100 000 ₴)', done: !!(input.totalCost && input.totalCost >= 100000) },
-          { label: 'Рік будівлі', done: input.buildingAge !== undefined },
+          { label: t('emptyState.checkCategory'), done: !!input.category },
+          { label: t('emptyState.checkCity'), done: !!input.region && !!input.settlementType },
+          { label: t('emptyState.checkArea'), done: !!(input.area && input.area >= 10) },
+          { label: t('emptyState.checkPrice'), done: !!(input.totalCost && input.totalCost >= 100000) },
+          { label: t('emptyState.checkAge'), done: input.buildingAge !== undefined },
         ].map(({ label, done }) => (
           <div key={label} className="flex items-center gap-2 text-xs">
             <div className={`w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 ${done ? 'bg-emerald-100' : 'bg-gray-100'}`}>
@@ -276,8 +269,16 @@ function CalculatorPageInner() {
             <div className="hidden lg:block flex-1 min-w-0">
               <div className="sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto">
                 {errorMessage && !loading && (
-                  <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
-                    {errorMessage}
+                  <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4">
+                    <p className="text-red-700 text-sm mb-3">{errorMessage}</p>
+                    <button
+                      onClick={() => {
+                        void calculate(input)
+                      }}
+                      className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
+                    >
+                      {t('retry')}
+                    </button>
                   </div>
                 )}
 
@@ -292,7 +293,9 @@ function CalculatorPageInner() {
 
                 {result && !loading && (
                   <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6">
-                    <CalculatorResults result={result} loanTermYears={input.loanTerm || 20} />
+                    <ErrorBoundary>
+                      <CalculatorResults result={result} loanTermYears={input.loanTerm || 20} />
+                    </ErrorBoundary>
                     <div className="mt-4 pt-4 border-t border-gray-100">
                       <button
                         onClick={handleShare}
@@ -303,7 +306,7 @@ function CalculatorPageInner() {
                             <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                             </svg>
-                            <span className="text-emerald-600 font-medium">Посилання скопійовано!</span>
+                            <span className="text-emerald-600 font-medium">{t('linkCopied')}</span>
                           </>
                         ) : (
                           <>
@@ -363,7 +366,9 @@ function CalculatorPageInner() {
 
               {mobileOpen && (
                 <div className="max-h-[70vh] overflow-y-auto px-5 pb-6 border-t border-gray-100">
-                  <CalculatorResults result={result} loanTermYears={input.loanTerm || 20} />
+                  <ErrorBoundary>
+                    <CalculatorResults result={result} loanTermYears={input.loanTerm || 20} />
+                  </ErrorBoundary>
                   <div className="mt-4 pt-4 border-t border-gray-100">
                     <button
                       onClick={handleShare}
@@ -374,7 +379,7 @@ function CalculatorPageInner() {
                           <svg className="w-4 h-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
-                          <span className="text-emerald-600 font-medium">Скопійовано!</span>
+                          <span className="text-emerald-600 font-medium">{t('linkCopied')}</span>
                         </>
                       ) : (
                         <>
@@ -397,8 +402,16 @@ function CalculatorPageInner() {
         {/* Mobile: progress/loading/error below form */}
         <div className="lg:hidden px-4 pb-24">
           {errorMessage && !loading && (
-            <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-              {errorMessage}
+            <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3">
+              <p className="text-red-700 text-sm mb-3">{errorMessage}</p>
+              <button
+                onClick={() => {
+                  void calculate(input)
+                }}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors"
+              >
+                {t('retry')}
+              </button>
             </div>
           )}
           {loading && (

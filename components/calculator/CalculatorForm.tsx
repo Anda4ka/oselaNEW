@@ -184,26 +184,16 @@ export default function CalculatorForm({ input, onInputChange }: CalculatorFormP
   )
 
   // Derive city display name from current input (show name if we have one stored, else empty)
-  const cityDisplayName = (input as Partial<CalculatorInput> & { cityName?: string }).cityName || ''
+  const cityDisplayName = input.cityName || ''
 
   const inputClass = 'w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent text-gray-900 text-sm'
 
   // --- Section completion ---
-  const isCategoryComplete = !!input.category
   const isFamilyComplete = !!(input.age && input.age >= 18 && input.familySize && input.familySize >= 1)
   const isPropertyComplete = !!(input.region && input.settlementType && input.area && input.area >= 10 && input.totalCost && input.totalCost >= 100000 && input.buildingAge !== undefined)
   const isLoanComplete = !!(input.loanTerm && input.loanTerm >= 1)
 
   // --- Section summaries (compact chips) ---
-  const categoryLabel: Record<string, string> = {
-    military: 'Військовий', security: 'Поліція/СБУ', medic: 'Медик',
-    teacher: 'Вчитель', scientist: 'Науковець', idp: 'ВПО',
-    veteran: 'Ветеран', regular: 'Загальна',
-  }
-  const rateLabel: Record<string, string> = {
-    military: '3%', security: '3%', medic: '3%', teacher: '3%',
-    scientist: '3%', idp: '7%', veteran: '7%', regular: '7%',
-  }
 
   const Chip = ({ children, color = 'gray' }: { children: React.ReactNode; color?: 'gray' | 'emerald' | 'blue' }) => {
     const cls = color === 'emerald'
@@ -214,15 +204,6 @@ export default function CalculatorForm({ input, onInputChange }: CalculatorFormP
     return <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${cls}`}>{children}</span>
   }
 
-  const categorySummary = input.category ? (
-    <>
-      <Chip>{categoryLabel[input.category] ?? input.category}</Chip>
-      <Chip color={rateLabel[input.category] === '3%' ? 'emerald' : 'blue'}>
-        {rateLabel[input.category]}
-      </Chip>
-    </>
-  ) : null
-
   const familySummary = (input.age && input.familySize) ? (
     <>
       <Chip>{input.age} р.</Chip>
@@ -231,7 +212,7 @@ export default function CalculatorForm({ input, onInputChange }: CalculatorFormP
     </>
   ) : null
 
-  const cityDisplayNameForSummary = (input as any).cityName || input.region || ''
+  const cityDisplayNameForSummary = input.cityName || input.region || ''
   const propertySummary = (input.region && input.area && input.totalCost) ? (
     <>
       {cityDisplayNameForSummary && <Chip>{cityDisplayNameForSummary}</Chip>}
@@ -248,29 +229,29 @@ export default function CalculatorForm({ input, onInputChange }: CalculatorFormP
     <div className="space-y-3">
       {/* Quick-fill presets */}
       <div>
-        <p className="text-xs text-gray-400 mb-2">Швидкий старт:</p>
+        <p className="text-xs text-gray-400 mb-2">{t('quickStart')}</p>
         <div className="flex gap-2 flex-wrap">
           {[
             {
-              label: '🪖 Військовий · Київ · 60м²',
+              label: t('presetMilitary'),
               values: {
                 category: 'military', propertyType: 'apartment' as const,
                 region: 'Kyiv', settlementType: 'major' as const,
-                area: 60, totalCost: 3000000, buildingAge: 0, loanTerm: 20,
+                area: 60, totalCost: 3000000, buildingAge: 2, loanTerm: 20,
                 age: 35, familySize: 3, cityName: 'Київ',
               },
             },
             {
-              label: '🏥 Медик · Харків · 45м²',
+              label: t('presetMedic'),
               values: {
                 category: 'medic', propertyType: 'apartment' as const,
                 region: 'Kharkiv', settlementType: 'major' as const,
-                area: 45, totalCost: 1800000, buildingAge: 0, loanTerm: 20,
+                area: 45, totalCost: 1800000, buildingAge: 2, loanTerm: 20,
                 age: 28, familySize: 2, cityName: 'Харків',
               },
             },
             {
-              label: '🚶 ВПО · Львів · 50м²',
+              label: t('presetIdp'),
               values: {
                 category: 'idp', propertyType: 'apartment' as const,
                 region: 'Lviv', settlementType: 'major' as const,
@@ -282,7 +263,7 @@ export default function CalculatorForm({ input, onInputChange }: CalculatorFormP
             <button
               key={preset.label}
               type="button"
-              onClick={() => onInputChange({ ...input, ...preset.values } as any)}
+              onClick={() => onInputChange({ ...input, ...preset.values })}
               className="text-xs px-3 py-1.5 rounded-full border border-gray-200 bg-white text-gray-600 hover:border-primary-400 hover:text-primary-700 hover:bg-primary-50 transition-colors"
             >
               {preset.label}
@@ -294,8 +275,6 @@ export default function CalculatorForm({ input, onInputChange }: CalculatorFormP
       <AccordionSection
         title={t('sections.category')}
         defaultOpen={true}
-        isComplete={isCategoryComplete}
-        summary={categorySummary}
       >
         <p className="text-sm text-gray-500">{t('category.hint')}</p>
         <div className="grid grid-cols-2 gap-2">
@@ -415,12 +394,11 @@ export default function CalculatorForm({ input, onInputChange }: CalculatorFormP
                 region: city.region,
                 settlementType: city.settlementType,
                 // Store display name for controlled input
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                ...(({ cityName: city.name } as any)),
+                cityName: city.name,
               })
             }}
             label={t('property.region')}
-            placeholder="Наприклад: Київ, Бровари, Харків..."
+            placeholder={t('property.regionPlaceholder')}
             inputClassName={inputClass}
           />
           {/* Show resolved values as small badges */}
@@ -436,7 +414,7 @@ export default function CalculatorForm({ input, onInputChange }: CalculatorFormP
         {/* Area */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">{t('property.area')} ({tCommon('sqm')})</label>
-          <input type="number" min="10" max="200" step="0.1" value={input.area || ''} onChange={(e) => update({ area: parseFloat(e.target.value) || undefined })} className={inputClass} placeholder="напр. 60" />
+          <input type="number" min="10" max="200" step="0.1" value={input.area || ''} onChange={(e) => update({ area: parseFloat(e.target.value) || undefined })} className={inputClass} placeholder={t('property.areaPlaceholder')} />
         </div>
 
         {/* Total cost — currency masked input */}
@@ -445,10 +423,10 @@ export default function CalculatorForm({ input, onInputChange }: CalculatorFormP
           <CurrencyInput
             value={input.totalCost}
             onChange={(v) => update({ totalCost: v })}
-            placeholder="напр. 2 500 000"
+            placeholder={t('property.totalCostPlaceholder')}
             className={inputClass}
           />
-          <p className="mt-1 text-xs text-gray-400">Введіть суму цифрами — відформатується автоматично</p>
+          <p className="mt-1 text-xs text-gray-400">{t('property.totalCostHint')}</p>
         </div>
 
         {/* Building age */}

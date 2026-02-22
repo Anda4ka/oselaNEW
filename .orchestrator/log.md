@@ -70,6 +70,50 @@
 
 ---
 
+## Аудит якості коду (2026-02-23)
+
+### Перевірено — реальні проблеми:
+| # | Проблема | Файл | Рішення |
+|---|----------|------|---------|
+| ✅ | `as any` / cityName не в типі | types.ts, CalculatorForm.tsx | → task-022 |
+| ✅ | Немає валідації числових полів в API | route.ts | → task-021 |
+| ✅ | Хардкод "Посилання скопійовано!" | page.tsx:306 | → task-022 |
+| ✅ | Дублювання formatCurrency | page.tsx + CalculatorResults.tsx | → task-024 |
+| ✅ | Немає Error Boundary | — | → task-023 |
+| ✅ | Немає кнопки Retry при помилці API | page.tsx | → task-023 |
+
+### Перевірено — хибна тривога (не виправляти):
+- ❌ Module-level cache в CityAutocomplete — нормально (client-only компонент)
+- ❌ CSRF для /api/calculator — не застосовно (stateless, не зберігає дані)
+- ❌ Fuse.js на клієнті — 6KB, не критично
+- ❌ console.error в catch — норма, допомагає дебагу в Railway логах
+- ❌ document.execCommand — fallback, працює у всіх браузерах
+
+### task-021.md — Валідація API — PASS ✅
+- ✅ `route.ts`: Number() sanitization + ізвалідація меж: area>0, totalCost≥100000, buildingAge≥0, loanTerm 1-20, age 18-100, familySize 1-20
+- ✅ `sanitizedInput` передається в `calculateMortgage` замість сирого `input`
+
+### task-022.md — TypeScript as any + i18n linkCopied — PASS ✅
+- ✅ `types.ts`: `cityName?: string` додано в `CalculatorInput`
+- ✅ `CalculatorForm.tsx`: всі 4× `as any` прибрані
+- ✅ `page.tsx` (×2), `uk.json`, `en.json`, `ru.json`: "Посилання скопійовано!" → `t('linkCopied')`
+
+### task-023.md — Error Boundary + Retry — PASS ✅
+- ✅ Новий `components/ErrorBoundary.tsx`: клас-компонент, `getDerivedStateFromError`, Retry кнопка
+- ✅ `page.tsx`: `<ErrorBoundary>` обгортає `<CalculatorResults>` (десктоп + мобайл)
+- ✅ `page.tsx`: Retry кнопка при помилці API → `t('retry')` в 3 локалях
+
+### task-024.md — Виніс formatCurrency в lib/utils.ts — PASS ✅
+- ✅ Новий `lib/utils.ts`: `formatCurrency` з точними опціями (`minimumFractionDigits: 0`)
+- ✅ `page.tsx` + `CalculatorResults.tsx`: імпорт з `@/lib/utils`, локальні дефініції видалено
+
+### Відома проблема (не задача):
+- ⚠️ prerender `/icon` → `TypeError: Invalid URL` — Railway/next/og конфлікт при білді
+  Причина: `next/og` звертається до `localhost:PORT` під час prerender, порт невідомий на build time
+  Не впливає на роботу сайту, favicon відображається коректно в браузері
+
+---
+
 ## UX-критика (2026-02-22) — нові задачі
 
 ### Що вже виправлено (по код-ревью — НЕ потребує задач):
