@@ -179,11 +179,11 @@ export default function HomePage() {
                 <span className="text-gray-500 text-sm">річних • перші 10 років</span>
                 <span className="ml-auto text-xs text-gray-400">6% після 10 років</span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 items-start">
+              <div className="flex flex-wrap justify-center gap-4 items-start">
                 {threePercentCategories.map((cat) => (
                   <div
                     key={cat.key}
-                    className={`bg-white rounded-xl border-2 cursor-pointer transition-all duration-200 p-5 ${expandedCard === cat.key
+                    className={`w-full sm:w-[calc(50%-8px)] lg:w-[calc(33.333%-11px)] bg-white rounded-xl border-2 cursor-pointer transition-all duration-200 p-5 ${expandedCard === cat.key
                         ? 'border-primary-400 shadow-md'
                         : 'border-gray-100 shadow-sm hover:border-primary-200 hover:shadow-md'
                       }`}
@@ -293,13 +293,20 @@ export default function HomePage() {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center text-gray-800 mb-12">{t('howItWorks.title')}</h2>
           <div className="max-w-4xl mx-auto">
-            <div className="space-y-8">
-              {steps.map((step) => (
-                <div key={step.key} className="flex items-start space-x-6">
-                  <div className="flex-shrink-0 w-12 h-12 bg-primary-600 text-white rounded-full flex items-center justify-center text-xl font-bold">
-                    {step.num}
+            <div className="relative">
+              {steps.map((step, idx) => (
+                <div key={step.key} className={`flex items-start space-x-6 ${idx < steps.length - 1 ? 'pb-10' : ''}`}>
+                  {/* Circle + vertical connector */}
+                  <div className="flex flex-col items-center flex-shrink-0">
+                    <div className="w-12 h-12 bg-primary-600 text-white rounded-full flex items-center justify-center text-xl font-bold z-10">
+                      {step.num}
+                    </div>
+                    {idx < steps.length - 1 && (
+                      <div className="w-0.5 flex-1 bg-primary-200 mt-2 min-h-[2rem]" />
+                    )}
                   </div>
-                  <div>
+                  {/* Content */}
+                  <div className="pt-2">
                     <h3 className="text-xl font-semibold text-gray-800 mb-2">{t(`howItWorks.${step.key}.title`)}</h3>
                     <p className="text-gray-600">{t(`howItWorks.${step.key}.description`)}</p>
                     {step.key === 'step3' && (

@@ -43,7 +43,7 @@ async function main() {
     { code: 'medic', nameUk: 'Медичний працівник (державний/комунальний)', nameRu: 'Медицинский работник (государственный/коммунальный)', nameEn: 'Healthcare Worker (Public)', ratePeriod1: 0.03, ratePeriod2: 0.06, maxBuildingAge: 3, frontlineMaxBuildingAge: 20 },
     { code: 'teacher', nameUk: 'Педагог (державний/комунальний)', nameRu: 'Педагог (государственный/коммунальный)', nameEn: 'Teacher (Public)', ratePeriod1: 0.03, ratePeriod2: 0.06, maxBuildingAge: 3, frontlineMaxBuildingAge: 20 },
     { code: 'scientist', nameUk: 'Науковець (державний/комунальний)', nameRu: 'Ученый (государственный/коммунальный)', nameEn: 'Scientist (Public)', ratePeriod1: 0.03, ratePeriod2: 0.06, maxBuildingAge: 3, frontlineMaxBuildingAge: 20 },
-    { code: 'idp', nameUk: 'Внутрішньо переміщена особа (ВПО)', nameRu: 'Внутренне перемещенное лицо (ВПО)', nameEn: 'Internally Displaced Person (IDP)', ratePeriod1: 0.07, ratePeriod2: 0.10, maxBuildingAge: 20, frontlineMaxBuildingAge: 20 },
+    { code: 'idp', nameUk: 'Внутрішньо переміщена особа (ВПО)', nameRu: 'Внутренне перемещенное лицо (ВПО)', nameEn: 'Internally Displaced Person (IDP)', ratePeriod1: 0.07, ratePeriod2: 0.10, maxBuildingAge: 10, frontlineMaxBuildingAge: 20 },
     { code: 'veteran', nameUk: 'Ветеран війни', nameRu: 'Ветеран войны', nameEn: 'War Veteran', ratePeriod1: 0.07, ratePeriod2: 0.10, maxBuildingAge: 3, frontlineMaxBuildingAge: 20 },
     { code: 'regular', nameUk: 'Громадянин без власного житла', nameRu: 'Гражданин без собственного жилья', nameEn: 'Citizen without housing', ratePeriod1: 0.07, ratePeriod2: 0.10, maxBuildingAge: 3, frontlineMaxBuildingAge: 3 },
   ]

@@ -252,7 +252,7 @@
         "downPayment20": "Down payment from 20% (10% under 26)",
         "newBuilding3": "Building up to 3 years old",
         "newBuilding20frontline": "Up to 20 years in frontline regions",
-        "idpBuilding20": "Building up to 20 years old (all regions)",
+        "idpBuilding20": "Building up to 10 years old (all regions)",
         "loan200to5m": "Loan from 200K to 5M UAH"
       }
     },

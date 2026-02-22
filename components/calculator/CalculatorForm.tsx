@@ -436,7 +436,7 @@ export default function CalculatorForm({ input, onInputChange }: CalculatorFormP
         {/* Area */}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">{t('property.area')} ({tCommon('sqm')})</label>
-          <input type="number" min="10" max="200" step="0.1" value={input.area || ''} onChange={(e) => update({ area: parseFloat(e.target.value) || undefined })} className={inputClass} />
+          <input type="number" min="10" max="200" step="0.1" value={input.area || ''} onChange={(e) => update({ area: parseFloat(e.target.value) || undefined })} className={inputClass} placeholder="напр. 60" />
         </div>
 
         {/* Total cost — currency masked input */}
@@ -458,7 +458,7 @@ export default function CalculatorForm({ input, onInputChange }: CalculatorFormP
           <p className="mt-1 text-xs text-gray-500">{t('property.buildingAgeHint')}</p>
           <div className="mt-2 flex flex-wrap gap-2">
             <span className="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-600">3 {tCommon('years')} standard</span>
-            <span className="px-2 py-1 text-xs rounded-full bg-blue-50 text-blue-700">20 {tCommon('years')} IDP</span>
+            <span className="px-2 py-1 text-xs rounded-full bg-blue-50 text-blue-700">10 {tCommon('years')} IDP</span>
             <span className="px-2 py-1 text-xs rounded-full bg-amber-50 text-amber-700">20 {tCommon('years')} frontline</span>
           </div>
         </div>

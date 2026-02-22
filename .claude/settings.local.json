@@ -9,7 +9,9 @@
       "WebFetch(domain:privatbank.ua)",
       "WebFetch(domain:mindev.gov.ua)",
       "WebFetch(domain:online.budstandart.com)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(dir:*)",
+      "Bash(findstr:*)"
     ]
   }
 }
