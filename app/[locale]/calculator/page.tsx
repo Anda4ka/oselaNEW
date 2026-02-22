@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef, useCallback, Suspense } from 'react'
 import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import Navbar from '@/components/Navbar'
@@ -39,7 +39,7 @@ function countFilledFields(input: Partial<CalculatorInput>): number {
 
 const TOTAL_FIELDS = 10
 
-export default function CalculatorPage() {
+function CalculatorPageInner() {
   const t = useTranslations('calculator')
   const tResults = useTranslations('results')
   const tCommon = useTranslations('common')
@@ -415,5 +415,20 @@ export default function CalculatorPage() {
         </div>
       </main>
     </>
+  )
+}
+
+export default function CalculatorPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-gradient-to-b from-primary-50 to-white flex items-center justify-center">
+        <svg className="animate-spin h-8 w-8 text-primary-500" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+        </svg>
+      </div>
+    }>
+      <CalculatorPageInner />
+    </Suspense>
   )
 }
